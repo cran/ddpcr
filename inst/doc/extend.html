@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Dean Attali" />
+
+<meta name="date" content="2016-02-19" />
+
+<title>Extending ddpcr by adding new plate types</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%7Bbackground%2Dcolor%3A%23fff%3Bmargin%3A1em%20auto%3Bmax%2Dwidth%3A700px%3Boverflow%3Avisible%3Bpadding%2Dleft%3A2em%3Bpadding%2Dright%3A2em%3Bfont%2Dfamily%3A%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3Bfont%2Dsize%3A14px%3Bline%2Dheight%3A1%2E35%7D%23header%7Btext%2Dalign%3Acenter%7D%23TOC%7Bclear%3Aboth%3Bmargin%3A0%200%2010px%2010px%3Bpadding%3A4px%3Bwidth%3A400px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bborder%2Dradius%3A5px%3Bbackground%2Dcolor%3A%23f6f6f6%3Bfont%2Dsize%3A13px%3Bline%2Dheight%3A1%2E3%7D%23TOC%20%2Etoctitle%7Bfont%2Dweight%3Abold%3Bfont%2Dsize%3A15px%3Bmargin%2Dleft%3A5px%7D%23TOC%20ul%7Bpadding%2Dleft%3A40px%3Bmargin%2Dleft%3A%2D1%2E5em%3Bmargin%2Dtop%3A5px%3Bmargin%2Dbottom%3A5px%7D%23TOC%20ul%20ul%7Bmargin%2Dleft%3A%2D2em%7D%23TOC%20li%7Bline%2Dheight%3A16px%7Dtable%7Bmargin%3A1em%20auto%3Bborder%2Dwidth%3A1px%3Bborder%2Dcolor%3A%23DDDDDD%3Bborder%2Dstyle%3Aoutset%3Bborder%2Dcollapse%3Acollapse%7Dtable%20th%7Bborder%2Dwidth%3A2px%3Bpadding%3A5px%3Bborder%2Dstyle%3Ainset%7Dtable%20td%7Bborder%2Dwidth%3A1px%3Bborder%2Dstyle%3Ainset%3Bline%2Dheight%3A18px%3Bpadding%3A5px%205px%7Dtable%2C%20table%20th%2C%20table%20td%7Bborder%2Dleft%2Dstyle%3Anone%3Bborder%2Dright%2Dstyle%3Anone%7Dtable%20thead%2C%20table%20tr%2Eeven%7Bbackground%2Dcolor%3A%23f7f7f7%7Dp%7Bmargin%3A0%2E5em%200%7Dblockquote%7Bbackground%2Dcolor%3A%23f6f6f6%3Bpadding%3A0%2E25em%200%2E75em%7Dhr%7Bborder%2Dstyle%3Asolid%3Bborder%3Anone%3Bborder%2Dtop%3A1px%20solid%20%23777%3Bmargin%3A28px%200%7Ddl%7Bmargin%2Dleft%3A0%7Ddl%20dd%7Bmargin%2Dbottom%3A13px%3Bmargin%2Dleft%3A13px%7Ddl%20dt%7Bfont%2Dweight%3Abold%7Dul%7Bmargin%2Dtop%3A0%7Dul%20li%7Blist%2Dstyle%3Acircle%20outside%7Dul%20ul%7Bmargin%2Dbottom%3A0%7Dpre%2C%20code%7Bbackground%2Dcolor%3A%23f7f7f7%3Bborder%2Dradius%3A3px%3Bcolor%3A%23333%7Dpre%7Bwhite%2Dspace%3Apre%2Dwrap%3Bborder%2Dradius%3A3px%3Bmargin%3A5px%200px%2010px%200px%3Bpadding%3A10px%7Dpre%3Anot%28%5Bclass%5D%29%7Bbackground%2Dcolor%3A%23f7f7f7%7Dcode%7Bfont%2Dfamily%3AConsolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3Bfont%2Dsize%3A85%25%7Dp%20%3E%20code%2C%20li%20%3E%20code%7Bpadding%3A2px%200px%7Ddiv%2Efigure%7Btext%2Dalign%3Acenter%7Dimg%7Bbackground%2Dcolor%3A%23FFFFFF%3Bpadding%3A2px%3Bborder%3A1px%20solid%20%23DDDDDD%3Bborder%2Dradius%3A3px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bmargin%3A0%205px%7Dh1%7Bmargin%2Dtop%3A0%3Bfont%2Dsize%3A35px%3Bline%2Dheight%3A40px%7Dh2%7Bborder%2Dbottom%3A4px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bpadding%2Dbottom%3A2px%3Bfont%2Dsize%3A145%25%7Dh3%7Bborder%2Dbottom%3A2px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bfont%2Dsize%3A120%25%7Dh4%7Bborder%2Dbottom%3A1px%20solid%20%23f7f7f7%3Bmargin%2Dleft%3A8px%3Bfont%2Dsize%3A105%25%7Dh5%2C%20h6%7Bborder%2Dbottom%3A1px%20solid%20%23ccc%3Bfont%2Dsize%3A105%25%7Da%7Bcolor%3A%230033dd%3Btext%2Ddecoration%3Anone%7Da%3Ahover%7Bcolor%3A%236666ff%7Da%3Avisited%7Bcolor%3A%23800080%7Da%3Avisited%3Ahover%7Bcolor%3A%23BB00BB%7Da%5Bhref%5E%3D%22http%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Da%5Bhref%5E%3D%22https%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Dcode%20%3E%20span%2Ekw%7Bcolor%3A%23555%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Edt%7Bcolor%3A%23902000%7Dcode%20%3E%20span%2Edv%7Bcolor%3A%2340a070%7Dcode%20%3E%20span%2Ebn%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Efl%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Ech%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Est%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Eco%7Bcolor%3A%23888888%3Bfont%2Dstyle%3Aitalic%7Dcode%20%3E%20span%2Eot%7Bcolor%3A%23007020%7Dcode%20%3E%20span%2Eal%7Bcolor%3A%23ff0000%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Efu%7Bcolor%3A%23900%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Eer%7Bcolor%3A%23a61717%3Bbackground%2Dcolor%3A%23e3d2d2%7D" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Extending ddpcr by adding new plate types</h1>
+<h4 class="author"><em>Dean Attali</em></h4>
+<h4 class="date"><em>2016-02-19</em></h4>
+</div>
+
+
+<div id="extending-ddpcr-by-adding-new-plate-types" class="section level1">
+<h1>Extending ddpcr by adding new plate types</h1>
+<p>While this package was developed as a tool to facilitate the analysis of some specific types of ddPCR data, it was implemented in a way that easily allows users to add custom ddPCR plate types through <em>S3 inheritance</em>. The basic concept is that every plate type has a parent plate type, from which it inherits all features, but can be made more specific or add/modify its behaviour. Inheritance is transitive (features are inherited from all ancestors, not only the most immediate one), but a plate can only have one parent (multiple inheritance is not supported).</p>
+<div id="default-plate-type-ddpcr_plate" class="section level2">
+<h2>Default plate type: ddpcr_plate</h2>
+<p>The most basic plate type is <code>ddpcr_plate</code>, and every plate type inherits from it, either directly or by inheriting from other plate types that are descendants of <code>ddpcr_plate</code>. This is handy because it means that all functionality that is common to all ddPCR types is implemented once for <code>ddpcr_plate</code> and can be used by all plate types, unless a plate type specifically removes or modifies some behaviour. Every plate type by default inherits all methods that <code>ddpcr_plate</code> has, which can be found by running <code>methods(class = &quot;ddpcr_plate&quot;)</code>. If you create a new plate type and no parent is specified, or if you initialize a ddPCR plate without specifying a plate type, then <code>ddpcr_plate</code> is assumed.</p>
+<p>Calling the <code>analyze()</code> function on any plate will result in running the ddPCR data through a series of <em>steps</em> that are defined for the given plate type, and the droplets in the data will be assigned to one of several <em>clusters</em> associated with the given plate type.</p>
+<p>Plates of type <code>ddpcr_plate</code> have 4 possible clusters: <code>UNDEFINED</code> for any droplet that has not been assigned a cluster yet, <code>FAILED</code> for droplets in failed wells, <code>OUTLIER</code> for outlier droplets, and <code>EMPTY</code> for droplets without any template in them. This information can also be seen with the <code>clusters()</code> function.</p>
+<p>Plates of type <code>ddpcr_plate</code> have 4 analysis steps: <code>INITIALIZE</code>, <code>REMOVE_FAILURES</code>, <code>REMOVE_OUTLIERES</code>, and <code>REMOVE_EMPTY</code>. This means that any plate that is created will perform these basic steps of removing failied wells, outlier droplets, and empty droplets. The exact functions used for each step can be seen with the <code>steps()</code> function. For example, <code>new_plate(sample_data_dir()) %&gt;% steps</code> will reveal that the <code>REMOVE_FAILURED</code> steps calls the function <code>remove_failures()</code>, so you can view the algorithm by running <code>ddpcr:::remove_failures.ddpcr_plate</code>.</p>
+<p>Plates of type <code>ddpcr_plate</code> also have a set of parameters that can be viewed with the <code>params()</code> function. Running <code>new_plate(sample_data_dir()) %&gt;% params %&gt;% str</code> will show all the default parameters that are used. Any of these parameters can be overridden in new plate types, and new parameters can be added.</p>
+</div>
+<div id="built-in-plate-types" class="section level2">
+<h2>Built-in plate types</h2>
+<p>The default plate type is the common base for all built-in types, but because it is not specific to any particular ddPCR data, it does not do any droplet gating, as that is highly dependent on the type of data. The default type is useful for pre-processing, exploring, and visualizing any ddPCR data. There are other built-in plate types available, and you can see a list through the <code>plate_types</code> variable. You can learn more about the built-in plate types and what kind of ddPCR data is suitable for each one by viewing its documentation with <code>?plate_types</code>. If none of the built-in plate types are useful for your data, you can create a new plate type with custom analysis steps or parameters.</p>
+</div>
+<div id="functions-to-implement-when-adding-a-new-plate-type" class="section level2">
+<h2>Functions to implement when adding a new plate type</h2>
+<p>If you want to add a new plate type, there are a few functions you need to implement. All these functions take one argument: a <code>ddpcr</code> plate object. Note that all these functions are S3 generics, so you need to follow the S3 method naming scheme.</p>
+<div id="parent_plate_type-define-parent-plate-type" class="section level3">
+<h3><code>parent_plate_type()</code>: Define parent plate type</h3>
+<p>Each ddPCR plate has a “parent” plate type from which it inherits all its properties. When creating a custom plate type, you should define this function and simply return the parent plate type. If you don’t define this function, the parent plate type is assumed to be the base type of <code>ddpcr_plate</code>. Inheriting from a parent plate means that the same cluster types, analysis steps, and parameters will be used by default.</p>
+</div>
+<div id="define_params-define-plate-type-parameters" class="section level3">
+<h3><code>define_params()</code>: Define plate type parameters</h3>
+<p>Every ddPCR plate type has a set of default parameters. When creating a custom plate type, if your plate type needs a different set of parameters than its parent type, you must define this function and have it return the parameters specific to this plate. When defining this function, you can use <code>NextMethod(&quot;define_params&quot;)</code> to get a list of the parameters of the parent type so that you can simply add to that list rather than redefining all the parameters.</p>
+</div>
+<div id="define_clusters-define-droplet-clusters" class="section level3">
+<h3><code>define_clusters()</code>: Define droplet clusters</h3>
+<p>Every ddPCR plate type has a set of potential clusters the droplets can be assigned to. When creating a custom plate type, if your plate type uses a different set of clusters than its parent type, you must define this function and have it return the cluster names. When defining this function, you can use <code>NextMethod(&quot;define_clusters&quot;)</code> to get a list of the clusters available in the parent type if you want to simply add new clusters without defining all of them.</p>
+</div>
+<div id="define_steps-define-analysis-steps" class="section level3">
+<h3><code>define_steps()</code>: Define analysis steps</h3>
+<p>Every ddPCR plate type has an ordered set of steps that are run to analyze the data. When creating a new plate type, if your plate type has different analysis steps than its parent type, you must define this function and have it return a named list of the analysis steps. When defining this function, you can use <code>NextMethod(&quot;define_steps&quot;)</code> to get a list of the steps available in the parent type if you want to simply add new steps without defining all of them. Any step that you define must have an associated function with the same name that takes a ddPCR plate as an argument and returns the ddPCR plate after running the given step on it. Most analysis steps will usually change the plate’s metadata (<code>?plate_meta</code>) and the droplet cluster assignments (<code>?plate_data</code>). See the example below for helper functions that are available when writing code for an analysis step.</p>
+</div>
+<div id="plot-plot-a-ddpcr-plate" class="section level3">
+<h3><code>plot()</code>: Plot a ddPCR plate</h3>
+<p>The default plot function provided by <code>ddpcr_plate</code> will usually be enough to convey your ddPCR plate information. If there is anything specific you want to add to plots of your new plate type, you can define this function. It is recommended to build on top of the output of the default plot function, rather than start a complete new plot. This can be done by having the first line of code being <code>p &lt;- NextMethod(&quot;plot&quot;)</code> and adding plot elements on top of <code>p</code>. Note that <code>ggplot2</code> is the default plotting library. Read the help section of the default plot to learn more <code>?plot.ddpcr_plate</code>.</p>
+</div>
+<div id="changing-the-algorithm-of-an-existing-step" class="section level3">
+<h3>Changing the algorithm of an existing step</h3>
+<p>With the <code>define_steps()</code> function you can define new analysis steps that are unique to your new plate type. It can also be desirable to simply change the implementation of an existing step instead of creating a new step. For example, any ddPCR plate will, by default, use the <code>ddpcr:::remove_failures.ddpcr_plate</code> function as the algorithm for flagging failed wells. If your plate type has a specific way of flagging failed wells, you can overwrite this step by defining a new S3 generic function for your plate type.</p>
+</div>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>As a simple exercise to show how easy it is to create a new plate type, this section will walk through the steps required to create a new plate type. The name of the new plate type is <code>fam_border</code>. In experiments of this type, we are interested in running the typical pre-processing (identify failed wells, outliers droplets, and empty droplets), followed by simply classifying the remaining droplets as either FAM-positive or FAM-negative, with the border between positive and negative being a predefined value. This plate type is clearly not very useful but it is good for demonstration purposes.</p>
+<p>The first thing to do is to define the parent plate type, which in this case will be <code>ddpcr_plate</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">parent_plate_type.fam_border &lt;-<span class="st"> </span>function(plate) {
+  <span class="st">&quot;ddpcr_plate&quot;</span>
+}</code></pre></div>
+<p>The next step is to define the parameters of this plate type. ddPCR plates of this type are expected to have at least 14,000 droplets per well as a QA metric. If any well has less droplets, it is considered a failure. There is already a parameter for this, so we just need to modify it. We also add a new parameter for the border to use for gating the droplets, and give it a default value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">define_params.fam_border &lt;-<span class="st"> </span>function(plate) {
+  params &lt;-<span class="st"> </span><span class="kw">NextMethod</span>(<span class="st">&quot;define_params&quot;</span>)
+  
+  new_params &lt;-<span class="st"> </span><span class="kw">list</span>(
+    <span class="st">'REMOVE_FAILURES'</span> =<span class="st"> </span><span class="kw">list</span>(
+      <span class="st">'TOTAL_DROPS_T'</span> =<span class="st"> </span><span class="dv">14000</span>  <span class="co"># overwriting an existing parameter</span>
+    ),
+    <span class="st">'GATE'</span> =<span class="st"> </span><span class="kw">list</span>(
+      <span class="st">'FAM_BORDER'</span> =<span class="st"> </span><span class="dv">5000</span>  <span class="co"># defining a new parameter</span>
+    )
+  )
+  params &lt;-<span class="st"> </span><span class="kw">modifyList</span>(params, new_params)
+  
+  params
+}</code></pre></div>
+<p>Next we define the potential droplet clusters. We use the same clusters as the default plate type and add two more, to denote droplets in the FAM-positive and FAM-negative sections.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">define_clusters.fam_border &lt;-<span class="st"> </span>function(plate) {
+  clusters &lt;-<span class="st"> </span><span class="kw">NextMethod</span>(<span class="st">&quot;define_clusters&quot;</span>)
+  
+  <span class="kw">c</span>(clusters,
+    <span class="st">'FAM_POSITIVE'</span>,
+    <span class="st">'FAM_NEGATIVE'</span>
+  )
+}</code></pre></div>
+<p>Next we define the analysis steps. We use all the default analysis steps (pre-processing steps), and add a gating step.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">define_steps.fam_border &lt;-<span class="st"> </span>function(plate) {
+  steps &lt;-<span class="st"> </span><span class="kw">NextMethod</span>(<span class="st">&quot;define_steps&quot;</span>)
+  
+  <span class="kw">c</span>(steps,
+    <span class="kw">list</span>(
+      <span class="st">'GATE'</span> =<span class="st"> 'gate_droplets'</span>
+    ))
+}</code></pre></div>
+<p>We need to create the <code>gate_droplets</code> function with the actual logic that will perform the step. Notice the use of the following helper functions that are especially useful when writing analysis step functions: <code>step</code>, <code>check_step</code>, <code>step_begin</code>, <code>step_end</code>, <code>unanalyzed_clusters</code>, <code>status</code>. You can look up the documentation for each of these functions to learn more.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gate_droplets &lt;-<span class="st"> </span>function(plate) {
+  <span class="co"># make sure this step was not called prematurely</span>
+  current_step &lt;-<span class="st"> </span><span class="kw">step</span>(plate, <span class="st">'GATE'</span>)
+  <span class="kw">check_step</span>(plate, current_step)  
+  
+  <span class="co"># show an informative message to the user</span>
+  <span class="kw">step_begin</span>(<span class="st">&quot;Classifying droplets as FAM-positive or negative&quot;</span>)
+  
+  data &lt;-<span class="st"> </span><span class="kw">plate_data</span>(plate)
+  border &lt;-<span class="st"> </span><span class="kw">params</span>(plate, <span class="st">'GATE'</span>, <span class="st">'FAM_BORDER'</span>)
+  
+  <span class="co"># get a list of clusters that have not been considered yet in the analysis</span>
+  <span class="co"># this is useful so that we only look at droplets that have not yet been</span>
+  <span class="co"># assigned to a cluster</span>
+  unanalyzed_clusters &lt;-<span class="st"> </span><span class="kw">unanalyzed_clusters</span>(plate, <span class="st">'FAM_POSITIVE'</span>)
+  
+  <span class="co"># get the indices of all droplets that are FAM-positive and negative</span>
+  unanalyzed_idx &lt;-<span class="st"> </span>data$cluster %in%<span class="st"> </span>unanalyzed_clusters
+  fam_pos &lt;-<span class="st"> </span>unanalyzed_idx &amp;<span class="st"> </span>data$FAM &gt;=<span class="st"> </span>border
+  fam_neg &lt;-<span class="st"> </span>unanalyzed_idx &amp;<span class="st"> </span>data$FAM &lt;<span class="st"> </span>border
+  
+  <span class="co"># assign each droplet to its cluster</span>
+  data[fam_pos, <span class="st">'cluster'</span>] &lt;-<span class="st"> </span><span class="kw">cluster</span>(plate, <span class="st">'FAM_POSITIVE'</span>)
+  data[fam_neg, <span class="st">'cluster'</span>] &lt;-<span class="st"> </span><span class="kw">cluster</span>(plate, <span class="st">'FAM_NEGATIVE'</span>)
+  
+  <span class="co"># update the data on the plate object</span>
+  <span class="kw">plate_data</span>(plate) &lt;-<span class="st"> </span>data
+  
+  <span class="co"># record how many drops in each well are in each cluster</span>
+  <span class="co"># and add this info to the plate's metadata</span>
+  drops_per_cluster &lt;-<span class="st"> </span>
+<span class="st">    </span>plyr::<span class="kw">ddply</span>(data, ~<span class="st"> </span>well, function(x) {
+      <span class="kw">data.frame</span>(
+        <span class="st">'drops_positive'</span> =<span class="st"> </span><span class="kw">sum</span>(x$cluster ==<span class="st"> </span><span class="kw">cluster</span>(plate, <span class="st">'FAM_POSITIVE'</span>)),
+        <span class="st">'drops_negative'</span> =<span class="st"> </span><span class="kw">sum</span>(x$cluster ==<span class="st"> </span><span class="kw">cluster</span>(plate, <span class="st">'FAM_NEGATIVE'</span>))
+      )
+    })
+  <span class="kw">plate_meta</span>(plate) &lt;-
+<span class="st">    </span>dplyr::<span class="kw">left_join</span>(
+      <span class="kw">plate_meta</span>(plate),
+      drops_per_cluster,
+      <span class="dt">by =</span> <span class="st">&quot;well&quot;</span>
+    )
+  
+  <span class="co"># VERY IMPORTANT - do not forget to update the status of the plate</span>
+  <span class="kw">status</span>(plate) &lt;-<span class="st"> </span>current_step
+  <span class="kw">step_end</span>()
+  
+  plate
+}</code></pre></div>
+<p>Now the new plate type is ready to be used. We can also add a plot function if there are any customizations to the plot that are specific to this plate type. The default plot function of ddPCR plates goes a long way, but one thing we can add is a line showing the division border.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot.fam_border &lt;-<span class="st"> </span>function(x, ..., <span class="dt">show_border =</span> <span class="ot">FALSE</span>) {
+  <span class="co"># Plot a regular ddpcr plate</span>
+  p &lt;-<span class="st"> </span><span class="kw">NextMethod</span>(<span class="st">&quot;plot&quot;</span>, x)
+  
+  <span class="co"># Show the custom thresholds</span>
+  if (show_border) {
+    border &lt;-<span class="st"> </span><span class="kw">params</span>(x, <span class="st">'GATE'</span>, <span class="st">'FAM_BORDER'</span>)
+    p &lt;-<span class="st"> </span>p +
+<span class="st">      </span>ggplot2::<span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> border)
+  }
+  
+  p
+}</code></pre></div>
+<p>The one last thing we can add is a convenient way for the user to set the border parameter.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">fam_border&lt;-</span><span class="st">`</span> &lt;-<span class="st"> </span>function(plate, value) {
+  <span class="kw">params</span>(plate, <span class="st">'GATE'</span>, <span class="st">'FAM_BORDER'</span>) &lt;-<span class="st"> </span>value
+  plate
+}</code></pre></div>
+<p>Now we can create a new ddPCR plate with the new type and run a full analysis of it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ddpcr)</code></pre></div>
+<pre><code>## 
+## Attaching package: 'ddpcr'</code></pre>
+<pre><code>## The following object is masked from 'package:stats':
+## 
+##     step</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plate &lt;-<span class="st"> </span><span class="kw">new_plate</span>(<span class="dt">dir =</span> <span class="kw">sample_data_dir</span>(), <span class="dt">type =</span> <span class="st">&quot;fam_border&quot;</span>)
+<span class="kw">fam_border</span>(plate) &lt;-<span class="st"> </span><span class="dv">8000</span>
+plate &lt;-<span class="st"> </span><span class="kw">analyze</span>(plate)
+<span class="kw">plot</span>(plate, <span class="dt">show_drops_empty =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(plate, <span class="dt">col_drops_fam_negative =</span> <span class="st">&quot;red&quot;</span>,
+     <span class="dt">col_drops_fam_positive =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">show_border =</span> <span class="ot">TRUE</span>)
+<span class="kw">plate_meta</span>(plate, <span class="dt">only_used =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>##   well sample row col used drops success drops_outlier drops_empty
+## 1  B01   Dean   B   1 TRUE 17458    TRUE             0       16690
+## 2  C01   Mike   C   1 TRUE 15279    TRUE             0       13903
+## 3  C08   Mary   C   8 TRUE 14801    TRUE             0       14023
+## 4  B06   Dave   B   6 TRUE 13657   FALSE             2          NA
+## 5  C06  Emily   C   6 TRUE 14504   FALSE             6          NA
+##   drops_non_empty drops_empty_fraction concentration drops_positive
+## 1             768                0.956            49            637
+## 2            1376                0.910           103           1248
+## 3             778                0.947            59            694
+## 4              NA                   NA            NA              0
+## 5              NA                   NA            NA              0
+##   drops_negative
+## 1            131
+## 2            128
+## 3             84
+## 4              0
+## 5              0</code></pre>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAA+VBMVEUAAAAAADoAAGYAOpAAZrYCAgIDAwMEBAQFBQUGBgYHBwcJCQkLCwsNDQ0ODg4PDw8QEBARERESEhIUFBQWFhYYGBgZGT0ZGV0ZPXsZXZYaGhobGxscHBwgICAiIiIlJSUqKiorKyszMzM1NTU6AAA6kNs9GRk9GT09GV09PT09e7FCQkJJSUlTU1NYWFhdGRldlsxmAABmkJBmtv9oaGh7PRl7scx/f3+CgoKQOgCQOmaQ29uQ2/+WXRmWzJaWzMyjo6Oxez2xzMy2ZgC2Zma2///Mll3MsXvMzJbMzLHMzMzbkDrb/7bb////tmb/25D//7b//9v////5J8/7AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAQzklEQVR4nO2deZubyBHGZw/NSEhmdhDajQcBjXA2wS3sdba9xkmc4DjrQ8760Pf/MOnmEqBG1UiAYKbfP4zneGqan6qqD7qLi63UQV2cuwF9lwQESAICJAEBkoAASUCAJCBAEhAgCQiQBARIAgIkAQGSgABJQIAkIEASECAJCJAEBEgCAiQBAZKAAElAgCQgQBIQIAkIkAQESAICJAEBkoAASUCAJCBAEhAgCQiQBARIAgIkAQGSgABJQIAkIEASECAJCJAEBEgCAiQBARIA9KIB9drUyYA2J+tFr01JQIApCQgwJQEBpiQgwJQEBJiSgABTEhBgSgICTLUN6N1f/93MXb37+fb2YTOmXt/e3v4iaqplQO+f/tQMoLd/+g81BhESMvX6x982b0FC3QB6e3vbDKAPzx+zW4OMiZlimF+Jsm4V0Nvbx2+bAfTuL79BZkRN9QkQVUOA3v70r6e3t4+bMNWrEGsM0GsWqvFnf6qpKPB/BB1yaICiOwKNCQF6Ra28+/mxYKuGAigy8+5nIDCE0llkRDjfDwRQbAZM1UKmYmeEgmxggN4//UXEmLgHCZsaCKDNazpQjAdDJ5u6kzko6noa6uY3r+qYahuQgO73ZPU8dyUBdWdKAgJMSUCAKQkIMCUBAaZOBtTcNoGemRL5OyKARECLmXjx5GS9KJk8pVUi7iUBDQKQ53iHoHi5n95LQAv9+oFZSceca9rNwvMch2G8j4DmD5j4hLzrB4k0c+GsvPsIyIkBXFMHiWLJiy9RYDkPctIW9xOQmt6/s1ytvSfeymaXJ956bZpqHtAD3bmXIZYG0dw2bUrG8Rx7TbONt17ePChKv5c5yFvEd6/ayxXLwt5q5TjrteMsruclQPMndwNQyERCei2b4ADy1nbsKIsk9bDc461XS3NxXeLDHGjogCiTUFH96Wg0mxibTUroIKCVTjONunDy36Q9lq4VAS2X0W8MDdDOS9gXJAjIKJMrAojCMJc/6Mt8L++tnCUdGj2ICUX/Xs/N2L8GAijlEu68hH2hG3jHZzQWCTHalS9M0yyMpD17tbheXFPHulE1014u1qvMv4YBKOOSBxQSVVNyfEZTIUCes5wvSzMNZ7mY65o+15cLL8pJu58PDFAuxEKWeQrSxZL0Sl/Yu7lYzIL61Nw06eRi7/eHAaiYemJhtcRnhPZM8HsxcxWNEOMvV7bzxDFZ1EVjxb1J7EAAlUQ79XBc5mOQPRM8QI6zss2EBJ2RspTj2IuFufLuDqDQJ66qlPhYwc7LqgFFw8I0ydAvFjfaQjdtc2lH0w2vuNYxVEDYUBV1wtLy5aUyuaT/0VCYj8JqQNHEIkXgOOYPix/m3sJ00lHjnhcNEVBoaRPFGo2UiaEi4ruaikspqhIQxbPLPxTQYr641uw8kbsACCNlNFN1VUU+ITQbEZIfHeVNlAHRLsxe5XowW9fnc9MuDooGHmKUiG9cTVQtxAbhDR/zJriAdgAc3aQTCme1l5kHDIi6DMLKxDJwkEvK5VHAgRBbrXIOtFza8cIq33uGBChFYFiW4hqqhnhDoz0TnF4sl2JMbbkwq344MEBpEBGszTTNosnnAJ4DIealDzToxTH1eSn9DB8QRhNFnbp4Ly3zTZQAMQAxBM92VnTCoZemFoMPsdBVJsrM9cO9tMw3UQmIZuYlHUPvT70GCygWsixNtTDmTs44JvZCLB1EO7a+XB9+ejhEQMR1LR1hUvkLZRP73XwyB1vbS+9g794eoPdPbzPltqM2ASgMiG4c9JyyiT1ASSdPx0OrlUB8tQMo25b/tklAbPU5wNiH3WcLAvI8z+Pk40EDYlk5RC4hgYgLHQ4xXm8+fEC+i4PQR8HB3qtsYn8kHTmQbZti8TUYQHRCilzauwfh4d6rbIK7aO+ZznzhiRIaBCAaX4ZLaHwJ0dkeBOQ5azuaop4LUHJWlh0NYqdFGgIUuMgSSs9FE7y5mG2vFzTGBPm0MA5ix6Y+PL99SH3pcVPjoBATNjoUb0p63Qe0orMM3pSiO0DRIZqH70sHZk9M0giRGg7EBUQ7djZ0Nu0aXVg7gLg6LcQw8V3R/JM3kQPE1sqo+3hrwQHikACRgE7f60TYPQNEZxjErcWnMsQczzNXdy7EwsD1hYaH+yb2ljvoFOzuASIusH5YbaIMiD3zEVrkGBKg0HJr9WB5EyVAjuOY9fAMABAxfGzVdKBKQJ7wDGMwgEiIUa0xYsHEDpAXPd0RnmAMCBDGqG6AcQB5K+D54GABYZEV1koTdxZQtqiBLb8RQGzr5lF8+gkoe6iDsW/UmmNkJpJrdp8OPPzhz2B7DSi0LMOtOUZMTCTX7Obt0h4ODp8VNwZ7CSgNMawrat0xYmoivmYO5GjXlT1Y7DoVY4B+Akpk6JZ2RAbieZCmL/UKF0rW8AflQZFCgiyj9hixYCIF5Dk3mlneHF0C1Mcc9PXlRaZvfy/dXehj10BH8SkDohnI0eeVOejg+uJ5PejLs2/+WXV3hoZd/zg+JUC0i9fmx42Czg0ocqI/c+/OmFyOsdBTQl5T0iu7RWelPri5EV6l7xkgqje58Mqagktbw2s2Jb3SO0wONw0Y0Hb78eLi1+LdxXvD1QY8KD3+dWSE9QPQdvv5USFJx3wujfBIF9oB8lJAR/LpBSDWmeWi7MU2PV3gn+5B8+ED+nRRCLA8ILEH8bympFdnkTufO0hAby4uvt+7uxTQ8U1Jr46jn8bnzIA+ljqwtCkn8smFmGPWXKTvFaDqkTRWlNrrrPmmpNeT2Jwf0OG7O6Up6fXuAPr6950HNVfvqmemRP4OH9DHC14yupfiAGL9PGfOek9VBvTlGcvQ5fnqPVYREB0F0WHQl2cSUKYCoC/Pfo0vElCmogd9kh5U1l6SfiNzUEGcXozl6Xwv1uCgomemRP4Ofxz0ibNof4rgkfThjcBst17yO30ZSW//2ymgqKZJNZ+1bTpO/DioN4D27+6UpqTXKgSswkm1D3nrpb0yewAo6eYr7u6UpqTXSgScZ/W5qPMc2/ZEQiwkIav9ALUn/o0jAX19WerDjgAkXFhg50J2+UFZ8RRZRusgIOKORxryg2zpvNAQgrSZgVl5vngzxvkAhZuoiUJlArk4+N8BAYV6sjScrp1n21KYW6G0gM8MnxlQiH1jSj/KIEi3ggisB+13Y/WfzaOEwFUBUBiGPjIsfVfaSENnDDHanKxWl5IWWepowWyW/uFskxc7WbsJDGQU6qtd+d0AKmaapNSAr+dbkmyI7QYQSQGp+T0EYUDQbFTQZNMJoMR/819tt0ax1JsRu1A3gLCVJpnCJ0csCxUBJXtUjgF0YPsLF1CuXiD7KiSXxabomw4BhW5caE7FpW9r00Kz0vqOrQ8Uw3DXTYSsp9j4o5JQpzmIsFKOVzMtH2AEo1Ab5QFN0kFAh7VcGSeiT9UyoHTDXkeAaG+FXIRzhVawZVhIn0xGo/FsMjXUK1XXdxVmuwCUtCzwsTorV+IcTVzxbr4ZQAHtFXKVaAgyFFW/nOiXV8gy6ACS+LmTSp15EBtoEOuyjGc0zjbsdfVcjETbK3a9K3a1K2Wi64pOwSRtzd1YB4CSRE0bEiFR2B6Z2RixsgP5oktdeVDhJD9lgY2xok8RQmQT7O/c6Q6Qb2njydVoPFYsHWetC7sGRP04X2iOfm6Wblgq5cPO2e5vgO8sxLCuji7pWExHRqHCZJ25WBOACPb9PKDAslQLo6g8H69EVtuAsqLbrqpcsQkOwkFUzr7aRKuAytUOQoyRZpC0o91vVsuAss8EIX2kTNWoFAwdCvEO/HYBiHqM7+c8mCBNdQ8eTeoGEDEQnV0oOopeg8COjHP26XUDaIPcdKGDjukxncDrB/cMdhJihOgK7UizQ1Ks7H+1iXZDjPg4+XQYLGRY7uGDAZ0kaazNRldI27WEu97ZUZIOSdIOGm6BqxnAnq9OunlrMhlfTqHdZx0B2u3CDbFPwHMT7QMKQ+yqo6m+dwix/pr06YBCki300ly4cTG4qbv92fxmYyhXExWVU6FwueQGAbGo2sQDHjqEx0EAb+ruAJBvqIrhluuP16gnXX/HazWgTTTPiAD5dF4KP/zpIMSwgQ2N0xDBEKtVHxAAlP5N9tYl4oc899lrVQrjw3NWhjNXwKwpD6KzQd0VOcTaBaCkTWxiEfKmphy/Tli8jmtzvb79pVFAIXJZW4BCyUUTLYZYIjrbIBVjjSpArMhb8T+NAArpNDlqyymAjhAfUK7ygVU55uCH2IfnD1Morx42CAjrhhad8BU54dI2oN2nZCAsVn93mwLKFQd83WSxW2zNpsKnxzoDFPquIVweK1+JM46xJmu5YqSLHxFvP8TiLj4kgY9EYj42kYTYzoOaqsQZzUktX7wQVeuAogVDVlzNx0IxH5soBVYuG51ciTMIA1zj/GHrIRawgQ8hPhIr35yYSLnEhNJrM4B8Iv5JtQ8oXmRBOqlVny8bKEaVbjevCiPF0wCxx0vC7di2DigeGCLfNwTLNycmNgd0EqCKdUPYRGuAWAaysF+z/GVLgKK+ol6pydZDjDoQJsio0aRta4CixXGBuTLPRIseRHuNurWx2gFEJ1+uceBhwTmWXCNAPq5beqUVQNHzSnRgvsMdprXezYelx6pCagdQEGALVxcDPg+g7bZiiePwjbUBiHbwgW8dcOYzhFj53eSiagNQGCDV39Qu9NYqIPYKgtrhFZloA5Bl1HodQslEC4DiCap/TG2sNgAR1ajdm27bBBQNOlC9dzRkrWoeELF87iK9qIk2ANExWeEFlDVa1Tig0PfdYyqVHguIt2S9F2LEd/FR1S+bBxRi19CbKTQpxof30GMvSRP2CtNeAAp9Y2YBtYAr+toWARHXnanHlS9sGhBBumIdXkWsesTRXojRccelatScpaYmmvagq4kx4z2QK2ycFAHkecc8EeMDmk6ulJpv+cha1TCg8Ujh8slBCSuyZREQe8f8Ec9UuYAMfTpVNfgmuK1qFpA2ml4qnB/nAFU+RCwA8m7mjtkYIHc6rv0Wi9REk4BCPBqPRtyW7EJMCFBSZ7KZECPG6OqIlxAkJhoEhOPTX9CvVk0Yc4AarKMYxoefjqvgvG0UUHq46ciWcAEd6UM7QGF6Ju38gMYtADpm60sREEnPzBzdqsYApcd3jg12Tg5qAFDqQdrRrWoMkJY05VhfLvZiSQo6OcSSxHhCfdDmctDstAgrj4NOKcaZ78VYkPFGHqKtag5Q5M4nlOLsYE36mFY1COjUpqRXCeiwiTsKqLl6Vz0zJfJ3BADdb0lAgCQgQBIQIAkIkAQESAICJAEBkoAASUCAJCBA5wX09WX8npw33/0RF7Km+u6Pz4/ol1v2bgZe5dSO1SNAMRWmT1HF78+P+lD3u5eAtm++/T372ZnVT0Bfnn2//diPV5/0ExANr7896kEC2p4fUJaZsyQdJ56PfXnxwLkBVXgQJdePCOsroDff/e9ZL3J0TwF9oiOgT/0Isl4C+vyIfftNL15R1UdAX19G+efLs3zQnUs9ApT0Yt/842Uyxfi098LOM0hOVgFJQIAkIEASECAJCJAEBEgCAiQBAZKAAElAgCQgQBIQIAkIkAQESAICJAEBkoAASUCAJCBAEhAgCQiQBARIAgIkAQGSgABJQIAkIEASECAJCJAEBEgCAiQBAZKAAElAgCQgQBIQIAkIkAQESAICJAEBkoAASUCAJCBAEhAgCQiQBARIAgIkAQH6P1LF0UyuzXggAAAAAElFTkSuQmCC" title alt width="50%" /><img src="data:image/png;base64,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" title alt width="50%" /></p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
