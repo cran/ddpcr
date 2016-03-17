@@ -1,13 +1,13 @@
 Package: ddpcr
 Title: Analysis and Visualization of Droplet Digital PCR in R and on
         the Web
-Version: 1.0.1
+Version: 1.1.2
 Authors@R: c(
     person("Dean", "Attali", email = "daattali@gmail.com", role = c("aut", "cre"))
     )
 Description: An interface to explore, analyze, and visualize droplet digital PCR
-    (ddPCR) data in R. This is the first non-proprietary software for
-    analyzing duplex ddPCR data. An interactive tool was also created and is available
+    (ddPCR) data in R. This is the first non-proprietary software for analyzing
+    two-channel ddPCR data. An interactive tool was also created and is available
     online to facilitate this analysis for anyone who is not comfortable with
     using R.
 URL: https://github.com/daattali/ddpcr
@@ -25,8 +25,8 @@ LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-02-19 12:31:00 UTC; Dean
+Packaged: 2016-03-17 04:23:04 UTC; Dean
 Author: Dean Attali [aut, cre]
 Maintainer: Dean Attali <daattali@gmail.com>
 Repository: CRAN
-Date/Publication: 2016-02-19 14:51:02
+Date/Publication: 2016-03-17 14:12:06

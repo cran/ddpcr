@@ -12,7 +12,7 @@ dir <- sample_data_dir()
 # example 1: manually set thresholds
 plate1 <-
   new_plate(dir, type = plate_types$custom_thresholds) %>%
-  subset("B01,B06") %>%
+  subset("A01,A05") %>%
   set_thresholds(c(5000, 7500)) %>%
   analyze()
 plot(plate1, show_grid_labels = TRUE, alpha_drops = 0.3,
@@ -20,7 +20,7 @@ plot(plate1, show_grid_labels = TRUE, alpha_drops = 0.3,
 
 # example 2: automatic gating
 new_plate(dir, type = plate_types$fam_positive_pnpp) %>%
-  subset("B01:B06") %>%
+  subset("A01:A05") %>%
   analyze() %>%
   plot(show_mutant_freq = FALSE, show_grid_labels = TRUE, alpha_drops = 0.3,
        title = "Automatic gating\nworks with PNPP experiments")
@@ -50,8 +50,8 @@ plate %>% plate_data()
 plate %>% plate_meta(only_used = TRUE)
 
 ## ----subset--------------------------------------------------------------
-plate <- plate %>% subset("B01:C06")
-# could have also used subset("B01, B06, C01, C06")
+plate <- plate %>% subset("A01:C05")
+# could have also used subset("A01, A05, C01, C05")
 plate %>% wells_used()
 
 ## ----steps---------------------------------------------------------------
@@ -72,16 +72,16 @@ plate %>% plate_data()
 plate %>% plate_meta(only_used = TRUE)
 
 ## ----explore-post-4------------------------------------------------------
-well_info(plate, "B06", "drops_empty")
+well_info(plate, "A05", "drops_empty")
 
 ## ----plotsimple----------------------------------------------------------
 plate %>% plot()
 
 ## ----plotparams, fig.show='hold', out.width='50%', fig.retina=FALSE------
-plate %>% plot(wells = "B01,B06", show_full_plate = TRUE,
+plate %>% plot(wells = "A01,A05", show_full_plate = TRUE,
                show_drops_empty = TRUE, col_drops_empty = "red",
                title = "Show full plate")
-plate %>% plot(wells = "B01,B06", superimpose = TRUE,
+plate %>% plot(wells = "A01,A05", superimpose = TRUE,
                show_grid = TRUE, show_grid_labels = TRUE, title = "Superimpose")
 
 ## ----saveload------------------------------------------------------------
@@ -94,7 +94,7 @@ unlink("myplate.rds")
 # two ways to create the desired plate
 plate_manual <- reset(plate, type = plate_types$custom_thresholds)
 plate_manual2 <- new_plate(dir, type = plate_types$custom_thresholds) %>%
-  subset("B01:C06")
+  subset("A01:C05")
 
 # make sure the two methods above are identical
 identical(plate_manual, plate_manual2)

@@ -36,7 +36,7 @@ observeEvent(dataValues$plate, {
   show(selector = sprintf("[data-ddpcr-type~=%s]", dataValues$plate %>% type))
   if (type(dataValues$plate) == plate_types$custom_thresholds) {
     updateSelectInput(session, "plotParamDropShow-empty", selected = "TRUE")
-  } else {
+  } else if (type(dataValues$plate) %in% c(plate_types$hex_positive_pnpp, plate_types$fam_positive_pnpp)) {
     # update the wildtype/mutant text
     updateCheckboxInput(
       session, "plotParam_show_mutant_freq",
@@ -108,6 +108,7 @@ output$clustersMapping <- renderUI({
 # show plate summary table
 output$metaTable <- DT::renderDataTable({
   meta <- dataValues$plate %>% plate_meta(only_used = TRUE)
+  meta[] <- lapply(meta, format, scientific = FALSE, big.mark = ",", drop0trailing = TRUE) 
   colnames <- meta %>% colnames %>% humanFriendlyNames
   DT::datatable(meta,
                 rownames = FALSE,
