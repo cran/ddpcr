@@ -3,8 +3,6 @@ context("utils")
 test_that("is_dir is TRUE when passed a directory", {
   expect_true(is_dir("."))
   expect_true(is_dir("../testthat"))
-  expect_true(is_dir("../../tests"))
-  expect_true(is_dir("../../tests/"))
 })
 
 test_that("is_dir is FALSE when passed a file or non-existent dir", {
@@ -51,12 +49,12 @@ test_that("cat0 works", {
 })
 
 test_that("quiet works", {
-  expect_output(quiet(print("hello world")), "^$")
-  expect_output(quiet(cat("hello world")), "^$")
+  expect_silent(quiet(print("hello world")))
+  expect_silent(quiet(cat("hello world")))
   expect_that(quiet(message("hello world"), FALSE), shows_message())
-  expect_that(quiet(message("hello world")), not(shows_message()))
+  expect_message(quiet(message("hello world")), NA)
   expect_that(quiet(warning("hello world"), all = FALSE), gives_warning())
-  expect_that(quiet(warning("hello world")), not(gives_warning()))
+  expect_warning(quiet(warning("hello world")), NA)
 })
 
 test_that("%btwn% works", {

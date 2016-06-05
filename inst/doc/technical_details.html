@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Dean Attali" />
+
+<meta name="date" content="2016-06-04" />
+
+<title>Implementation technical details</title>
+
+
+
+
+
+
+<link href="data:text/css;charset=utf-8,body%7Bbackground%2Dcolor%3A%23fff%3Bmargin%3A1em%20auto%3Bmax%2Dwidth%3A700px%3Boverflow%3Avisible%3Bpadding%2Dleft%3A2em%3Bpadding%2Dright%3A2em%3Bfont%2Dfamily%3A%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3Bfont%2Dsize%3A14px%3Bline%2Dheight%3A1%2E35%7D%23header%7Btext%2Dalign%3Acenter%7D%23TOC%7Bclear%3Aboth%3Bmargin%3A0%200%2010px%2010px%3Bpadding%3A4px%3Bwidth%3A400px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bborder%2Dradius%3A5px%3Bbackground%2Dcolor%3A%23f6f6f6%3Bfont%2Dsize%3A13px%3Bline%2Dheight%3A1%2E3%7D%23TOC%20%2Etoctitle%7Bfont%2Dweight%3Abold%3Bfont%2Dsize%3A15px%3Bmargin%2Dleft%3A5px%7D%23TOC%20ul%7Bpadding%2Dleft%3A40px%3Bmargin%2Dleft%3A%2D1%2E5em%3Bmargin%2Dtop%3A5px%3Bmargin%2Dbottom%3A5px%7D%23TOC%20ul%20ul%7Bmargin%2Dleft%3A%2D2em%7D%23TOC%20li%7Bline%2Dheight%3A16px%7Dtable%7Bmargin%3A1em%20auto%3Bborder%2Dwidth%3A1px%3Bborder%2Dcolor%3A%23DDDDDD%3Bborder%2Dstyle%3Aoutset%3Bborder%2Dcollapse%3Acollapse%7Dtable%20th%7Bborder%2Dwidth%3A2px%3Bpadding%3A5px%3Bborder%2Dstyle%3Ainset%7Dtable%20td%7Bborder%2Dwidth%3A1px%3Bborder%2Dstyle%3Ainset%3Bline%2Dheight%3A18px%3Bpadding%3A5px%205px%7Dtable%2C%20table%20th%2C%20table%20td%7Bborder%2Dleft%2Dstyle%3Anone%3Bborder%2Dright%2Dstyle%3Anone%7Dtable%20thead%2C%20table%20tr%2Eeven%7Bbackground%2Dcolor%3A%23f7f7f7%7Dp%7Bmargin%3A0%2E5em%200%7Dblockquote%7Bbackground%2Dcolor%3A%23f6f6f6%3Bpadding%3A0%2E25em%200%2E75em%7Dhr%7Bborder%2Dstyle%3Asolid%3Bborder%3Anone%3Bborder%2Dtop%3A1px%20solid%20%23777%3Bmargin%3A28px%200%7Ddl%7Bmargin%2Dleft%3A0%7Ddl%20dd%7Bmargin%2Dbottom%3A13px%3Bmargin%2Dleft%3A13px%7Ddl%20dt%7Bfont%2Dweight%3Abold%7Dul%7Bmargin%2Dtop%3A0%7Dul%20li%7Blist%2Dstyle%3Acircle%20outside%7Dul%20ul%7Bmargin%2Dbottom%3A0%7Dpre%2C%20code%7Bbackground%2Dcolor%3A%23f7f7f7%3Bborder%2Dradius%3A3px%3Bcolor%3A%23333%3Bwhite%2Dspace%3Apre%2Dwrap%7Dpre%7Bborder%2Dradius%3A3px%3Bmargin%3A5px%200px%2010px%200px%3Bpadding%3A10px%7Dpre%3Anot%28%5Bclass%5D%29%7Bbackground%2Dcolor%3A%23f7f7f7%7Dcode%7Bfont%2Dfamily%3AConsolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3Bfont%2Dsize%3A85%25%7Dp%20%3E%20code%2C%20li%20%3E%20code%7Bpadding%3A2px%200px%7Ddiv%2Efigure%7Btext%2Dalign%3Acenter%7Dimg%7Bbackground%2Dcolor%3A%23FFFFFF%3Bpadding%3A2px%3Bborder%3A1px%20solid%20%23DDDDDD%3Bborder%2Dradius%3A3px%3Bborder%3A1px%20solid%20%23CCCCCC%3Bmargin%3A0%205px%7Dh1%7Bmargin%2Dtop%3A0%3Bfont%2Dsize%3A35px%3Bline%2Dheight%3A40px%7Dh2%7Bborder%2Dbottom%3A4px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bpadding%2Dbottom%3A2px%3Bfont%2Dsize%3A145%25%7Dh3%7Bborder%2Dbottom%3A2px%20solid%20%23f7f7f7%3Bpadding%2Dtop%3A10px%3Bfont%2Dsize%3A120%25%7Dh4%7Bborder%2Dbottom%3A1px%20solid%20%23f7f7f7%3Bmargin%2Dleft%3A8px%3Bfont%2Dsize%3A105%25%7Dh5%2C%20h6%7Bborder%2Dbottom%3A1px%20solid%20%23ccc%3Bfont%2Dsize%3A105%25%7Da%7Bcolor%3A%230033dd%3Btext%2Ddecoration%3Anone%7Da%3Ahover%7Bcolor%3A%236666ff%7Da%3Avisited%7Bcolor%3A%23800080%7Da%3Avisited%3Ahover%7Bcolor%3A%23BB00BB%7Da%5Bhref%5E%3D%22http%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Da%5Bhref%5E%3D%22https%3A%22%5D%7Btext%2Ddecoration%3Aunderline%7Dcode%20%3E%20span%2Ekw%7Bcolor%3A%23555%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Edt%7Bcolor%3A%23902000%7Dcode%20%3E%20span%2Edv%7Bcolor%3A%2340a070%7Dcode%20%3E%20span%2Ebn%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Efl%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Ech%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Est%7Bcolor%3A%23d14%7Dcode%20%3E%20span%2Eco%7Bcolor%3A%23888888%3Bfont%2Dstyle%3Aitalic%7Dcode%20%3E%20span%2Eot%7Bcolor%3A%23007020%7Dcode%20%3E%20span%2Eal%7Bcolor%3A%23ff0000%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Efu%7Bcolor%3A%23900%3Bfont%2Dweight%3Abold%7Dcode%20%3E%20span%2Eer%7Bcolor%3A%23a61717%3Bbackground%2Dcolor%3A%23e3d2d2%7D" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Implementation technical details</h1>
+<h4 class="author"><em>Dean Attali</em></h4>
+<h4 class="date"><em>2016-06-04</em></h4>
+
+
+
+<div id="implementation-technical-details" class="section level1">
+<h1>Implementation technical details</h1>
+<p>The <em>ddpcr</em> package makes extensive use of the S3 class inheritance system in R. The plate object is implemented as an S3 object of class <code>ddpcr_plate</code> with the R <code>list</code> as its base type. S3 objects are used for two main purposes: to override the behaviour of some base R functions when applied to plate objects, and to allow plate objects to inherit characteristics of other plate objects.</p>
+<div id="a-plate-object-is-a-list" class="section level2">
+<h2>A plate object is a list</h2>
+<p>Every S3 object has a base type upon which it is built. The base type of a plate object is a list, as it allows for an easy way to bundle together the several different R objects describing a plate into one. All information required to analyze a plate is part of the plate object. Every plate object contains the following nine items:</p>
+<ul>
+<li><strong>plate_data</strong> - A data.frame containing the fluorescence amplitude values and the cluster assignment for each droplet. The fluorescence values remain static throughout an analysis, while the cluster assignments start as “undefined” and are assigned specific clusters during the analysis.<br />
+</li>
+<li><strong>plate_meta</strong> - A data.frame containing the metadata information about each well. Each analysis step adds more variables to the metadata.</li>
+<li><strong>name</strong> - A string representing the name of the dataset.</li>
+<li><strong>status</strong> - An integer indicating the number of steps in the analysis pipeline that the plate has already run through.</li>
+<li><strong>params</strong> - A list containing all the parameters used in the analysis algorithm.</li>
+<li><strong>clusters</strong> - A vector of names of all the possible clusters a droplet can be assigned to. For example, any plate with a PN/PP type has seven possible clusters: undefined (a droplet that has not been analyzed yet), failed (a droplet in a failed well), outlier, empty, rain, positive (PP), negative (PN).<br />
+</li>
+<li><strong>steps</strong> - A named list containing the steps required to analyze the given plate. The name of each item in the list is a short descriptive name of the analysis step, and the value is the name of the function that contains the code to run the step. The items in the list of steps are ordered in the same order that the analysis is carried out.</li>
+<li><strong>dirty</strong> - A Boolean flag indicating whether or not the analysis parameters have been modified since the analysis was run. If any parameters have changed, the <code>dirty</code> flag is set to true and the user is informed that the plate should be re-analyzed in order for the new parameters to take effect.</li>
+<li><strong>version</strong> - A number representing the version of <em>ddpcr</em> at the time of plate creation. This information is not directly used by the program, but it can be useful when inspecting an old plate object to know whether it was created with the most up to date version of the package.</li>
+</ul>
+<p>Except for the version and dirty flag, all other seven items in the plate’s list have corresponding getter and setter functions for convenience. For example, the name of a dataset can be retrieved with a call to <code>name(plate)</code> and can be modified with a call to <code>name(plate) &lt;- &quot;my data&quot;</code>. The only information about a plate object that is not inside the plate’s list is the plate type. The plate’s type is already stored as the plate object’s class in order for S3 to function, so including the plate type in the list would be redundant.</p>
+</div>
+<div id="using-s3-for-plate-objects-to-override-base-generic-functions" class="section level2">
+<h2>Using S3 for plate objects to override base generic functions</h2>
+<p>Since the plate object is an S3 object, it can benefit from the use of generic functions. There are three common generic functions that the plate object implements: <code>print()</code>, <code>plot()</code>, and <code>subset()</code>. The <code>print()</code> and <code>plot()</code> generics are very often implemented for S3 classes, and they are especially useful for plate objects. The <code>print()</code> method does not take any extra arguments and is used to print a summary of a plate object in a visually appealing way to the console. It gives an overview of the most important parameters of the plate such as its type and name, as well as the current analysis state of a plate. The <code>plot()</code> method generates a scatterplot of every well in the plate object and can be highly customizable using the many arguments it implements. While the base <code>plot()</code> method uses base R graphics, the <code>plot()</code> method for <code>ddpcr_plate</code> objects uses the ‘ggplot2’ package. The <code>subset()</code> generic is overridden by a method that can be called to retain a subset of wells from a larger plate. The <code>subset()</code> method uses two additional arguments, <code>wells</code> and <code>samples</code>, to specify which wells to select.</p>
+</div>
+<div id="using-s3-for-plate-objects-to-support-inheritance" class="section level2">
+<h2>Using S3 for plate objects to support inheritance</h2>
+<p>Inheritance means that every plate type has a parent plate type from which it inherits all its features, but specific behaviour can be added or modified. In <em>ddpcr</em>, transitive inheritance is implemented, which means that features are inherited from all ancestors rather than only the most immediate one. Multiple inheritance is not supported, meaning that each plate object can only have one parent.</p>
+<p>The notion of inheritance is an important part of the <em>ddpcr</em> package, as it allows ddPCR data from different assay types to share many properties. For example, PN/PP assays are first treated using the analysis steps common to all ddPCR experiments, and then gated with an assay-specific step, so PN/PP assays can be thought of as inheriting the analysis from general ddPCR assays. Furthermore, FAM-positive and HEX-positive assays (defined in Section 2.1) are both PN/PP assays that share many similarities, so they can be thought of as inheriting many properties of a PN/PP assay. Another benefit of the <em>ddpcr</em> inheritance is that it allows any user to easily extend the functionality of the package by adding custom ddPCR plate types.</p>
+</div>
+<div id="analysis-of-different-built-in-plate-types" class="section level2">
+<h2>Analysis of different built-in plate types</h2>
+<p>The most basic plate type is <code>ddpcr_plate</code>, and every plate type inherits from it, either directly or by inheriting from other plate types that are descendants of <code>ddpcr_plate</code>. This is useful because it means that all functionality that is common to all ddPCR experiments is implemented once for <code>ddpcr_plate</code>, and every other plate type automatically inherits all the methods that <code>ddpcr_plate</code> has. When a new plate object is created (with the <code>new_plate()</code> function) without specifying a plate type, the <code>ddpcr_plate</code> type is assumed.</p>
+<p>Calling the <code>analyze()</code> function on any plate will result in running the ddPCR data through a series of steps that are defined for the given plate type, and the read droplets will be assigned to one of several clusters associated with the given plate type. The exact set of analysis steps and potential clusters are determined by the plate type. Plates of type <code>ddpcr_plate</code> have four possible droplet clusters: “undefined” for any droplet that has not been assigned a cluster yet, “failed” for droplets in failed wells, “outlier” for outlier droplets, and “empty” for droplets without any template in them. Plates of type <code>ddpcr_plate</code> have 4 analysis steps: “INITIALIZE”, “REMOVE_FAILURES”, “REMOVE_OUTLIERS”, and “REMOVE_EMPTY”. This means that any plate that is created will perform these basic steps of removing failed wells, outlier droplets, and empty droplets. Other plate types inherit the same clusters and steps by default, and can alter them to be more appropriate for each specific type. For example, PN/PP plate types use the same clusters, as well as three more: “rain”, “positive” (PP), and “negative” (PN). PN/PP plate types also use the same list of steps as the base type, with the addition of steps at the end to perform droplet gating.</p>
+</div>
+<div id="how-the-analysis-steps-work" class="section level2">
+<h2>How the analysis steps work</h2>
+<p>The most important functionality of the <em>ddpcr</em> package is the ability to programmatically analyze a plate’s droplet data. As described above, a plate object contains a list of ordered steps that can be accessed via the <code>steps()</code> command. The value of each element in the list refers to the name of the function that implements that analysis step. For example, the last step in the analysis of a basic plate of type <code>ddpcr_plate</code> is “remove_empty”, which means that the <code>remove_empty()</code> function is automatically called when the analysis pipeline reaches this step.</p>
+<p>One of the several properties of a plate object that is stored in the plate’s underlying list object is its status. The status of a plate is simply an integer that indicates how many analysis steps have been taken. When a plate is created, the first step of initialization runs automatically, and the plate’s status is set to one. To analyze a plate, the <code>analyze()</code> or <code>next_step()</code> functions are used. The <code>next_step()</code> runs the next step by examining the plate’s list of steps and its current state to determine what function to call. The <code>analyze()</code> function can be used to run the full analysis pipeline on a plate, as it simply calls <code>next_step()</code> repeatedly until the analysis is completed.</p>
+<p>There are several commonalities among all functions that implement the analysis steps:</p>
+<ul>
+<li>All the step functions accept a plate object as input and return a plate object as output. No other parameters are required to pass to any step function because all parameters should be contained within the plate object’s <code>params</code>.</li>
+<li>All the steps functions are implemented as generics in order to allow new plate types to override their logic.</li>
+<li>To ensure reproducibility, the random seed is set at the beginning of every analysis step. This guarantees that even if the same step is called twice in a row, it will produce identical results.</li>
+<li>All step functions must update the status of the returned plate object to reflect the recently run step.</li>
+<li>All step functions call the <code>step_begin()</code> and <code>step_end()</code> functions to allow the user to see what step is currently being run and to calculate how long each step takes.</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
