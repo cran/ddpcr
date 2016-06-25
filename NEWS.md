@@ -1,8 +1,16 @@
+<<<<<<< HEAD
+# ddpcr 1.3 2016-06-03
+=======
+# shinyjs 1.4 2016-06-24
+
+Small internal changes to reflect `dplyr` update
+
 # shinyjs 1.3 2016-06-03
+>>>>>>> update to new dplyr; fixes #8
 
 Prepare for re-release to CRAN and to F1000Research
 
-# shinyjs 1.2.0
+# ddpcr 1.2.0
 
 2016-03-22
 
