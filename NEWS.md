@@ -1,12 +1,14 @@
-<<<<<<< HEAD
-# ddpcr 1.3 2016-06-03
-=======
-# shinyjs 1.4 2016-06-24
+# ddpcr 1.5 2016-08-03
+
+- better error message when trying to read directory that doesn't have any data files (#10)
+- changed default droplet volume to 85 nL based on literature (@seaaan) (#12)
+- change one unit test from `expect_identical` to `expect_equal` to reflect a change in `readr` (#13)
+
+# ddpcr 1.4 2016-06-24
 
 Small internal changes to reflect `dplyr` update
 
-# shinyjs 1.3 2016-06-03
->>>>>>> update to new dplyr; fixes #8
+# ddpcr 1.3 2016-06-03
 
 Prepare for re-release to CRAN and to F1000Research
 

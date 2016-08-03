@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dean Attali" />
 
-<meta name="date" content="2016-06-24" />
+<meta name="date" content="2016-08-03" />
 
 <title>Package ddpcr</title>
 
@@ -70,15 +70,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Package ddpcr</h1>
 <h4 class="author"><em>Dean Attali</em></h4>
-<h4 class="date"><em>2016-06-24</em></h4>
+<h4 class="date"><em>2016-08-03</em></h4>
 
 
 
 <div id="ddpcr-analysis-and-visualization-of-droplet-digital-pcr-data-in-r-and-on-the-web" class="section level1">
 <h1>ddpcr: Analysis and visualization of Droplet Digital PCR data in R and on the web</h1>
-<p><a href="https://travis-ci.org/daattali/ddpcr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCI+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4Mj0iMCIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JiYiIgc3RvcC1vcGFjaXR5PSIuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPjwvbGluZWFyR3JhZGllbnQ+PHJlY3Qgcng9IjMiIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPjxyZWN0IHJ4PSIzIiB4PSIzNyIgd2lkdGg9IjUzIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNGMxIi8+PHBhdGggZmlsbD0iIzRjMSIgZD0iTTM3IDBoNHYyMGgtNHoiLz48cmVjdCByeD0iMyIgd2lkdGg9IjkwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ1cmwoI2EpIi8+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPjx0ZXh0IHg9IjE5LjUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj5idWlsZDwvdGV4dD48dGV4dCB4PSIxOS41IiB5PSIxNCI+YnVpbGQ8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPnBhc3Npbmc8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTQiPnBhc3Npbmc8L3RleHQ+PC9nPjwvc3ZnPg==" alt="Build Status" /></a> <a href="https://cran.r-project.org/package=ddpcr"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MSIgaGVpZ2h0PSIyMCI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4Mj0iMCIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxtYXNrIGlkPSJhIj4KICAgIDxyZWN0IHdpZHRoPSI3MSIgaGVpZ2h0PSIyMCIgcng9IjMiIGZpbGw9IiNmZmYiLz4KICA8L21hc2s+CiAgPGcgbWFzaz0idXJsKCNhKSI+CiAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDQzdjIwSDB6Ii8+CiAgICA8cGF0aCBmaWxsPSIjNGMxIiBkPSJNNDMgMGg1NHYyMEg0M3oiLz4KICAgIDxwYXRoIGZpbGw9InVybCgjYikiIGQ9Ik0wIDBoNzF2MjBIMHoiLz4KICA8L2c+CiAgPGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIKICAgICBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICA8dGV4dCB4PSIyMS41IiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgIENSQU4KICAgIDwvdGV4dD4KICAgIDx0ZXh0IHg9IjIxLjUiIHk9IjE0Ij4KICAgICAgQ1JBTgogICAgPC90ZXh0PgogICAgPHRleHQgeD0iNTYiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj4KICAgICAgMS4zCiAgICA8L3RleHQ+CiAgICA8dGV4dCB4PSI1NiIgeT0iMTQiPgogICAgICAxLjMKICAgIDwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==" alt="CRAN version" /></a></p>
+<p><a href="https://travis-ci.org/daattali/ddpcr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCI+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4Mj0iMCIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JiYiIgc3RvcC1vcGFjaXR5PSIuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPjwvbGluZWFyR3JhZGllbnQ+PHJlY3Qgcng9IjMiIHdpZHRoPSI5MCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPjxyZWN0IHJ4PSIzIiB4PSIzNyIgd2lkdGg9IjUzIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNGMxIi8+PHBhdGggZmlsbD0iIzRjMSIgZD0iTTM3IDBoNHYyMGgtNHoiLz48cmVjdCByeD0iMyIgd2lkdGg9IjkwIiBoZWlnaHQ9IjIwIiBmaWxsPSJ1cmwoI2EpIi8+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPjx0ZXh0IHg9IjE5LjUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj5idWlsZDwvdGV4dD48dGV4dCB4PSIxOS41IiB5PSIxNCI+YnVpbGQ8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPnBhc3Npbmc8L3RleHQ+PHRleHQgeD0iNjIuNSIgeT0iMTQiPnBhc3Npbmc8L3RleHQ+PC9nPjwvc3ZnPg==" alt="Build Status" /></a> <a href="https://cran.r-project.org/package=ddpcr"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MSIgaGVpZ2h0PSIyMCI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4Mj0iMCIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxtYXNrIGlkPSJhIj4KICAgIDxyZWN0IHdpZHRoPSI3MSIgaGVpZ2h0PSIyMCIgcng9IjMiIGZpbGw9IiNmZmYiLz4KICA8L21hc2s+CiAgPGcgbWFzaz0idXJsKCNhKSI+CiAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDQzdjIwSDB6Ii8+CiAgICA8cGF0aCBmaWxsPSIjNGMxIiBkPSJNNDMgMGg1NHYyMEg0M3oiLz4KICAgIDxwYXRoIGZpbGw9InVybCgjYikiIGQ9Ik0wIDBoNzF2MjBIMHoiLz4KICA8L2c+CiAgPGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIKICAgICBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICA8dGV4dCB4PSIyMS41IiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgIENSQU4KICAgIDwvdGV4dD4KICAgIDx0ZXh0IHg9IjIxLjUiIHk9IjE0Ij4KICAgICAgQ1JBTgogICAgPC90ZXh0PgogICAgPHRleHQgeD0iNTYiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj4KICAgICAgMS40CiAgICA8L3RleHQ+CiAgICA8dGV4dCB4PSI1NiIgeT0iMTQiPgogICAgICAxLjQKICAgIDwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==" alt="CRAN version" /></a></p>
 <p>This package provides an interface to explore, analyze, and visualize droplet digital PCR (ddPCR) data in R. It also includes an interactive web application with a visual user interface to facilitate analysis for anyone who is not comfortable with using R. The app is <a href="http://daattali.com/shiny/ddpcr/">available online</a> or it can be <a href="#r-interactive">run locally</a>.</p>
-<p>This document explains the purpose of this package and includes a tutorial on how to use. It should take about 20 minutes to go through the entire document.</p>
+<p>This document explains the purpose of this package and includes a tutorial on how to use it. It should take about 20 minutes to go through the entire document.</p>
 </div>
 <div id="table-of-contents" class="section level1">
 <h1>Table of contents</h1>
@@ -138,7 +138,7 @@ Main features
 </h2>
 <p>The main features include:</p>
 <ul>
-<li><strong>Identify failed wells</strong> - identify wells with a failed ddPCR reaction. These wells will be excluded from all downstream analysis. No template control (NTC) will be deemed as failures by this tool.</li>
+<li><strong>Identify failed wells</strong> - identify wells with a failed ddPCR reaction. These wells will be excluded from all downstream analysis. No template control (NTC) wells will be deemed as failures by this tool.</li>
 <li><strong>Identify outlier droplets</strong> - sometimes a few droplets can have an extremely high fluorescent intensity value that is probably erroneous, perhaps as a result of an error with the fluorescence reader. These droplets are identified and removed from the downstream analysis.</li>
 <li><strong>Identify empty droplets</strong> - droplets with very low fluorescent amplitudes are considered empty and are removed from the downstream analysis. Removing these droplets is beneficial for two reasons: 1. the size of the data is greatly reduced, which means the computations will be faster on the remaining droplets, and 2. the real signal of interest is in the non-empty droplets, and empty droplets can be regarded as noise.</li>
 <li><strong>Calculating template concentration</strong> - by knowing how many empty droplets are in each well, the starting concentration of the target DNA in the sample can be calculated (as number of copies of target template per microlitre of sample). Calculate the starting concentration of the target DNA molecule in the sample, defined as the number of copies per microlitre of input.</li>
@@ -213,8 +213,8 @@ Loading ddPCR data
 </h3>
 <p>The first step is to get the ddPCR data into R. <code>ddpcr</code> uses the data files that are exported by QuantaSoft as its input. If you loaded an experiment named <code>2015-05-20_mouse</code> with 50 wells to QuantaSoft, then QuantaSoft can export the following files:</p>
 <ul>
-<li>50 data files (well files): each well will have its own file with the name ending in <code>*_Amplitude.csv</code>. For example, the droplets in well A01 will be saved in <code>2015-05-20_mouse_A01_Aamplitude.csv</code> (click on <strong>Export Amplitude and Cluster Data</strong> button in the <strong>Setup</strong> tab).</li>
-<li>1 results file: a small file named <code>2015-05-20_mouse.csv</code> will be generated with some information about the plate, including the name of the sample in each well (click on <strong>Export CSV</strong> button in the <strong>Analyze</strong> tab).</li>
+<li>50 data files (well files): each well will have its own file with the name ending in <code>*_Amplitude.csv</code>. For example, the droplets in well A01 will be saved in <code>2015-05-20_mouse_A01_Amplitude.csv</code> (click on the <strong>Export Amplitude and Cluster Data</strong> button in the <strong>Setup</strong> tab).</li>
+<li>1 results file: a small file named <code>2015-05-20_mouse.csv</code> will be generated with some information about the plate, including the name of the sample in each well (click on the <strong>Export CSV</strong> button in the <strong>Analyze</strong> tab).</li>
 </ul>
 <p>The well files are the only required input to <code>ddpcr</code>, and since ddPCR plates contain 96 wells, you can upload anywhere from 1 to 96 well files. The results file is not mandatory, but if you don’t provide it then the wells will not have sample names attached to them.</p>
 <p><code>ddpcr</code> contains a sample dataset called <code>small</code> that has 5 wells. We use the <code>new_plate()</code> function to initialize a new ddPCR plate object. If given a directory, it will automatically find all the valid well files in the directory and attempt to find a matching results file.</p>
@@ -253,8 +253,7 @@ Pre-analysis exploration of the data
 <p>There are 5 wells because the sample data folder has 5 well files.</p>
 <p>We can see all the droplets data with <code>plate_data()</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plate %&gt;%<span class="st"> </span><span class="kw">plate_data</span>()</code></pre></div>
-<pre><code>#&gt; Source: local data frame [72,727 x 4]
-#&gt; 
+<pre><code>#&gt; # A tibble: 72,727 x 4
 #&gt;     well   HEX   FAM cluster
 #&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;
 #&gt; 1    A01   577   494       1
@@ -267,7 +266,7 @@ Pre-analysis exploration of the data
 #&gt; 8    A01  1058   966       1
 #&gt; 9    A01  1058   979       1
 #&gt; 10   A01  1095  1002       1
-#&gt; ..   ...   ...   ...     ...</code></pre>
+#&gt; # ... with 72,717 more rows</code></pre>
 <blockquote>
 <p><strong>Technical note</strong>: This shows us the fluorescence amplitudes of each droplet, along with the current cluster assignment of each droplet. Right now all droplets are assigned to cluster 1 which corresponds to <em>undefined</em> since no analysis has taken place yet. You can see all the clusters that a droplet can belong to with the <code>clusters()</code> function</p>
 <pre><code>plate %&gt;% clusters()
@@ -331,8 +330,7 @@ Post-analysis exploration of the data
 #&gt;       Status : Analysis completed</code></pre>
 <p>We now get a message that says the analysis is complete (earlier it said which steps were remaining). We can also look at the droplets data</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plate %&gt;%<span class="st"> </span><span class="kw">plate_data</span>()</code></pre></div>
-<pre><code>#&gt; Source: local data frame [57,350 x 4]
-#&gt; 
+<pre><code>#&gt; # A tibble: 57,350 x 4
 #&gt;     well   HEX   FAM cluster
 #&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;
 #&gt; 1    A01   577   494       4
@@ -345,7 +343,7 @@ Post-analysis exploration of the data
 #&gt; 8    A01  1058   966       4
 #&gt; 9    A01  1058   979       4
 #&gt; 10   A01  1095  1002       4
-#&gt; ..   ...   ...   ...     ...</code></pre>
+#&gt; # ... with 57,340 more rows</code></pre>
 <p>This isn’t very informative since it shows the cluster assignment for each droplet, which is not easy for a human to digest. Instead, this information can be visualized by plotting the plate (coming up). We can also look at the plate results</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plate %&gt;%<span class="st"> </span><span class="kw">plate_meta</span>(<span class="dt">only_used =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>#&gt;   well sample row col used drops success drops_outlier drops_empty
@@ -354,9 +352,9 @@ Post-analysis exploration of the data
 #&gt; 3  C01   Mike   C   1 TRUE 14256    TRUE             0       12879
 #&gt; 4  C05  Emily   C   5 TRUE 14109   FALSE             0          NA
 #&gt;   drops_non_empty drops_empty_fraction concentration
-#&gt; 1            2130                0.865           159
-#&gt; 2            1882                0.857           169
-#&gt; 3            1377                0.903           112
+#&gt; 1            2130                0.865           170
+#&gt; 2            1882                0.857           181
+#&gt; 3            1377                0.903           120
 #&gt; 4              NA                   NA            NA</code></pre>
 <p>Now there’s a bit more information in the results table. The <em>success</em> column indicates whether or not the ddPCR run was successful in that particular well; notice how well <code>C05</code> was deemed a failure, and thus is not included the any subsequent analysis steps.</p>
 <p>You can use the <code>well_info()</code> function to get the value of a specific variable of a specific well from the results. For example, we can query the plate object to see how many empty droplets are in well <code>A05</code>.</p>
@@ -495,7 +493,7 @@ Analysis of a PNPP experiment
 <pre><code>#&gt; Identifying outlier droplets...</code></pre>
 <pre><code>#&gt; DONE (0 seconds)</code></pre>
 <pre><code>#&gt; Identifying empty droplets...</code></pre>
-<pre><code>#&gt; DONE (0 seconds)</code></pre>
+<pre><code>#&gt; DONE (1 seconds)</code></pre>
 <pre><code>#&gt; Classifying droplets...</code></pre>
 <pre><code>#&gt; DONE (0 seconds)</code></pre>
 <pre><code>#&gt; Reclassifying droplets... skipped (not enough wells with significant mutant clusters)</code></pre>
@@ -514,10 +512,10 @@ Results of a PNPP experiment
 #&gt; 4  F05   Mary   F   5 TRUE 15377    TRUE             0       14126
 #&gt; 5  C05  Emily   C   5 TRUE 14109   FALSE             0          NA
 #&gt;   drops_non_empty drops_empty_fraction concentration mutant_border
-#&gt; 1            2130                0.865           159          4194
-#&gt; 2            1882                0.857           169          3789
-#&gt; 3            1377                0.903           112          4356
-#&gt; 4            1251                0.919            92          3926
+#&gt; 1            2130                0.865           170          4194
+#&gt; 2            1882                0.857           181          3789
+#&gt; 3            1377                0.903           120          4356
+#&gt; 4            1251                0.919            99          3926
 #&gt; 5              NA                   NA            NA            NA
 #&gt;   filled_border significant_mutant_cluster mutant_num wildtype_num
 #&gt; 1          8286                      FALSE          4         1827
@@ -558,7 +556,7 @@ Advanced topic 1: Plate parameters
 #&gt;  $ GENERAL        :List of 4
 #&gt;   ..$ X_VAR         : chr &quot;HEX&quot;
 #&gt;   ..$ Y_VAR         : chr &quot;FAM&quot;
-#&gt;   ..$ DROPLET_VOLUME: num 0.00091
+#&gt;   ..$ DROPLET_VOLUME: num 0.00085
 #&gt;   ..$ RANDOM_SEED   : num 8
 #&gt;  $ REMOVE_FAILURES:List of 3
 #&gt;   ..$ TOTAL_DROPS_T      : num 5000

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dean Attali" />
 
-<meta name="date" content="2016-06-24" />
+<meta name="date" content="2016-08-03" />
 
 <title>Extending ddpcr by adding new plate types</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Extending ddpcr by adding new plate types</h1>
 <h4 class="author"><em>Dean Attali</em></h4>
-<h4 class="date"><em>2016-06-24</em></h4>
+<h4 class="date"><em>2016-08-03</em></h4>
 
 
 
@@ -82,7 +82,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The most basic plate type is <code>ddpcr_plate</code>, and every plate type inherits from it, either directly or by inheriting from other plate types that are descendants of <code>ddpcr_plate</code>. This is handy because it means that all functionality that is common to all ddPCR types is implemented once for <code>ddpcr_plate</code> and can be used by all plate types, unless a plate type specifically removes or modifies some behaviour. Every plate type by default inherits all methods that <code>ddpcr_plate</code> has, which can be found by running <code>methods(class = &quot;ddpcr_plate&quot;)</code>. If you create a new plate type and no parent is specified, or if you initialize a ddPCR plate without specifying a plate type, then <code>ddpcr_plate</code> is assumed.</p>
 <p>Calling the <code>analyze()</code> function on any plate will result in running the ddPCR data through a series of <em>steps</em> that are defined for the given plate type, and the droplets in the data will be assigned to one of several <em>clusters</em> associated with the given plate type.</p>
 <p>Plates of type <code>ddpcr_plate</code> have 4 possible clusters: <code>UNDEFINED</code> for any droplet that has not been assigned a cluster yet, <code>FAILED</code> for droplets in failed wells, <code>OUTLIER</code> for outlier droplets, and <code>EMPTY</code> for droplets without any template in them. This information can also be seen with the <code>clusters()</code> function.</p>
-<p>Plates of type <code>ddpcr_plate</code> have 4 analysis steps: <code>INITIALIZE</code>, <code>REMOVE_FAILURES</code>, <code>REMOVE_OUTLIERES</code>, and <code>REMOVE_EMPTY</code>. This means that any plate that is created will perform these basic steps of removing failied wells, outlier droplets, and empty droplets. The exact functions used for each step can be seen with the <code>steps()</code> function. For example, <code>new_plate(sample_data_dir()) %&gt;% steps</code> will reveal that the <code>REMOVE_FAILURED</code> steps calls the function <code>remove_failures()</code>, so you can view the algorithm by running <code>ddpcr:::remove_failures.ddpcr_plate</code>.</p>
+<p>Plates of type <code>ddpcr_plate</code> have 4 analysis steps: <code>INITIALIZE</code>, <code>REMOVE_FAILURES</code>, <code>REMOVE_OUTLIERS</code>, and <code>REMOVE_EMPTY</code>. This means that any plate that is created will perform these basic steps of removing failed wells, outlier droplets, and empty droplets. The exact functions used for each step can be seen with the <code>steps()</code> function. For example, <code>new_plate(sample_data_dir()) %&gt;% steps</code> will reveal that the <code>REMOVE_FAILURES</code> steps calls the function <code>remove_failures()</code>, so you can view the algorithm by running <code>ddpcr:::remove_failures.ddpcr_plate</code>.</p>
 <p>Plates of type <code>ddpcr_plate</code> also have a set of parameters that can be viewed with the <code>params()</code> function. Running <code>new_plate(sample_data_dir()) %&gt;% params %&gt;% str</code> will show all the default parameters that are used. Any of these parameters can be overridden in new plate types, and new parameters can be added.</p>
 </div>
 <div id="built-in-plate-types" class="section level2">
@@ -119,12 +119,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<p>As a simple exercise to show how easy it is to create a new plate type, this section will walk through the steps required to create a new plate type. The name of the new plate type is <code>fam_border</code>. In experiments of this type, we are interested in running the typical pre-processing (identify failed wells, outliers droplets, and empty droplets), followed by simply classifying the remaining droplets as either FAM-positive or FAM-negative, with the border between positive and negative being a predefined value. This plate type is clearly not very useful but it is good for demonstration purposes.</p>
+<p>As a simple exercise to show how easy it is to create a new plate type, this section will walk through the steps required to create a new plate type. The name of the new plate type is <code>fam_border</code>. In experiments of this type, we are interested in running the typical pre-processing (identify failed wells, outlier droplets, and empty droplets), followed by simply classifying the remaining droplets as either FAM-positive or FAM-negative, with the border between positive and negative being a predefined value. This plate type is clearly not very useful but it is good for demonstration purposes.</p>
 <p>The first thing to do is to define the parent plate type, which in this case will be <code>ddpcr_plate</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">parent_plate_type.fam_border &lt;-<span class="st"> </span>function(plate) {
   <span class="st">&quot;ddpcr_plate&quot;</span>
 }</code></pre></div>
-<p>The next step is to define the parameters of this plate type. ddPCR plates of this type are expected to have at least 14,000 droplets per well as a QA metric. If any well has less droplets, it is considered a failure. There is already a parameter for this, so we just need to modify it. We also add a new parameter for the border to use for gating the droplets, and give it a default value.</p>
+<p>The next step is to define the parameters of this plate type. ddPCR plates of this type are expected to have at least 14,000 droplets per well as a QA metric. If any well has fewer droplets, it is considered a failure. There is already a parameter for this, so we just need to modify it. We also add a new parameter for the border to use for gating the droplets, and give it a default value.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">define_params.fam_border &lt;-<span class="st"> </span>function(plate) {
   params &lt;-<span class="st"> </span><span class="kw">NextMethod</span>(<span class="st">&quot;define_params&quot;</span>)
   
@@ -158,7 +158,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <span class="st">'GATE'</span> =<span class="st"> 'gate_droplets'</span>
     ))
 }</code></pre></div>
-<p>We need to create the <code>gate_droplets</code> function with the actual logic that will perform the step. Notice the use of the following helper functions that are especially useful when writing analysis step functions: <code>step</code>, <code>check_step</code>, <code>step_begin</code>, <code>step_end</code>, <code>unanalyzed_clusters</code>, <code>status</code>. You can look up the documentation for each of these functions to learn more.</p>
+<p>We need to create the <code>gate_droplets</code> function with the actual logic that will perform the step. Notice the use of the following helper functions that are especially useful when writing analysis step functions: <code>step</code>, <code>check_step</code>, <code>step_begin</code>, <code>step_end</code>, <code>unanalyzed_clusters</code>, and <code>status</code>. You can look up the documentation for each of these functions to learn more.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gate_droplets &lt;-<span class="st"> </span>function(plate) {
   <span class="co"># make sure this step was not called prematurely</span>
   current_step &lt;-<span class="st"> </span><span class="kw">step</span>(plate, <span class="st">'GATE'</span>)
@@ -249,9 +249,9 @@ plate &lt;-<span class="st"> </span><span class="kw">analyze</span>(plate)
 ## 4  A05   Dave   A   5 TRUE 13165   FALSE             1          NA
 ## 5  C05  Emily   C   5 TRUE 14109   FALSE             0          NA
 ##   drops_non_empty drops_empty_fraction concentration drops_positive
-## 1            2130                0.865           159           1889
-## 2            1377                0.903           112           1281
-## 3            1251                0.919            92           1090
+## 1            2130                0.865           170           1889
+## 2            1377                0.903           120           1281
+## 3            1251                0.919            99           1090
 ## 4              NA                   NA            NA              0
 ## 5              NA                   NA            NA              0
 ##   drops_negative
