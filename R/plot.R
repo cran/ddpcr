@@ -218,7 +218,7 @@ plot.ddpcr_plate <- function(
     p <- p +
       ggplot2::facet_grid(row ~ col)
   }
-  
+
   # show unused wells
   if (!superimpose) {
     if (sum(!meta[['used']], na.rm = TRUE) > 0) {

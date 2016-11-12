@@ -1,3 +1,9 @@
+# ddpcr 1.6 2016-11-11
+- fix all ggplot2 code to work with new version ggplot2 2.2.0
+- add reference to f1000 paper in shiny app About section
+- suppress messages from readr
+- upgrade to DT v0.2
+
 # ddpcr 1.5 2016-08-03
 
 - better error message when trying to read directory that doesn't have any data files (#10)

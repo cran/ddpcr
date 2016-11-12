@@ -16,7 +16,7 @@ plotWithLabel <- function(p, label) {
 
 # Remove outliers step image
 
-plate <- new_plate(sample_data_dir()) %>% subset("b6") %>%
+plate <- new_plate(data_files = "inst/vignettes-supp/vignette_data_B06_Amplitude.csv") %>% subset("b6") %>%
   `plate_data<-`(plate_data(.) %>% dplyr::filter(FAM < 11000))
 full <- plate_data(plate)
 ndrops <- nrow(full)
@@ -45,7 +45,7 @@ dev.off()
 
 # Remove empty droplets step image
 
-plate <- new_plate(sample_data_dir()) %>% subset("b6") %>%
+plate <- new_plate(data_files = "inst/vignettes-supp/vignette_data_B06_Amplitude.csv") %>% subset("b6") %>%
   `plate_data<-`(plate_data(.) %>% dplyr::filter(FAM < 11000, HEX < 10000))
 full <- plate_data(plate)
 quiet( mixmdl <- mixtools::normalmixEM(full$FAM, k = 2) )
@@ -71,7 +71,8 @@ dev.off()
 
 # Identify rain droplets
 
-plate <- new_plate(sample_data_dir(), type = plate_types$fam_positive_pnpp) %>%
+plate <- new_plate(data_files = "inst/vignettes-supp/vignette_data_B06_Amplitude.csv",
+                   type = plate_types$fam_positive_pnpp) %>%
   subset("b6") %>% 
   `plate_data<-`(plate_data(.) %>% dplyr::filter(FAM < 11000, HEX < 10000))
 full_orig <- plate_data(plate)
@@ -95,7 +96,7 @@ p1 <- ggExtra::ggMarginal(p, xparams = list(colour = "transparent"))
 # Identify mutant vs wildtype droplets
 
 full <- full %>% dplyr::filter(FAM >= filled_border)
-range <- ggplot_build(p)$panel$x_scales[[1]]$range$range
+range <- ggplot_build(p)$layout$panel_scales$x[[1]]$range$range
 dens_smooth <- stats::density(full$HEX)
 maxima_idx <- local_maxima(dens_smooth$y)
 minima_idx <- local_minima(dens_smooth$y)
@@ -112,7 +113,7 @@ p <- ggplot(full, aes(HEX, FAM)) +
 p2 <- ggExtra::ggMarginal(p, yparams = list(colour = "transparent"))
 
 
-plate <- new_plate(sample_data_dir()) %>% subset("b6") %>%
+plate <- new_plate(data_files = "inst/vignettes-supp/vignette_data_B06_Amplitude.csv") %>% subset("b6") %>%
   `plate_data<-`(plate_data(.) %>% dplyr::filter(FAM < 11000, HEX < 10000))
 full <- plate_data(plate)
 full$colour <- "black"
