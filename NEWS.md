@@ -1,4 +1,14 @@
+# ddpcr 1.8 2017-05-19
+
+- refactor code to work with new versions of `dplyr` and `ggplot2`
+
+# ddpcr 1.7 2016-12-08
+
+- add support for targets for channel 1 and 2, in newer QuantaSoft export formats (v1.7.4) (thanks @acnb)
+- some improvements to Shiny UI
+
 # ddpcr 1.6 2016-11-11
+
 - fix all ggplot2 code to work with new version ggplot2 2.2.0
 - add reference to f1000 paper in shiny app About section
 - suppress messages from readr

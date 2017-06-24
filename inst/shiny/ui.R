@@ -13,7 +13,8 @@ tagList(
     tags$script(src = "ddpcr.js"),
     tags$link(href = "style.css", rel = "stylesheet")
   ),
-  div(id = "loading-content", h1("Loading...")),
+  div(id = "loading-content", "Loading...",
+      img(src = "ajax-loader-bar.gif")),
   
   navbarPage(
     title = tags$b("ddPCR Analysis"),
@@ -21,7 +22,6 @@ tagList(
     id = "mainNav",
     inverse = TRUE,
     fluid = FALSE,
-    position = "fixed-top",
     collapsible = TRUE,
     header = source(file.path("ui", "header.R"),  local = TRUE)$value,
     
