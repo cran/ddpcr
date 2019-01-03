@@ -6,7 +6,7 @@ print.ddpcr_plate <- function(x, ...) {
     cat0("Empty ddPCR plate")
     return()
   }
-  
+
   # The following code is some very ugly and messy logic that simply tries
   # to print the information as beautifully as possible. Warning: VERY UGLY CODE!
   width <- getOption("width")
@@ -29,7 +29,7 @@ print.ddpcr_plate <- function(x, ...) {
     if (width < 60) {
       return(paste(x, collapse = ", "))
     }
-    
+
     string <- x[1]
     total <- nchar(string)
     for (i in seq(2, length(x))) {
@@ -43,12 +43,12 @@ print.ddpcr_plate <- function(x, ...) {
     }
     string
   }
-  
+
   # print the actual information
   cat0(sp(" ddpcr plate\n", 8))
   cat0(sp("-------------\n", 9))
   cat0(sp("Dataset name"), " : ", x %>% name, "\n")
-  cat0(sp("Data summary"), " : ", 
+  cat0(sp("Data summary"), " : ",
        x %>% wells_used %>% length, " wells; ",
        x %>% plate_data %>% nrow %>% prettyNum(big.mark = ","), " drops\n")
   cat0(sp("Plate type"), " : ", sp_list(type(x, TRUE)), "\n")
@@ -64,7 +64,7 @@ print.ddpcr_plate <- function(x, ...) {
          "\n"
     )
   }
-  
+
   if (is_dirty(x)) {
     cat0("\nNote: some settings have changed, please re-run the analysis with `analyze(plate, restart = TRUE)` for changes to take effect")
   }
