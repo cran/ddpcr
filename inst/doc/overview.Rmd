@@ -18,13 +18,12 @@ options(ddpcr.verbose = TRUE)
 
 [![Build Status](https://travis-ci.org/daattali/ddpcr.svg?branch=master)](https://travis-ci.org/daattali/ddpcr)
 [![CRAN version](http://www.r-pkg.org/badges/version/ddpcr)](https://cran.r-project.org/package=ddpcr)
-[![saythanks](http://i.imgur.com/L88apDa.png)](https://saythanks.io/to/daattali)
 
-> *Copyright 2016 [Dean Attali](http://deanattali.com). Licensed under the MIT license.*
+> *Copyright 2016-2019 [Dean Attali](http://deanattali.com). Licensed under the MIT license.*
 
 This package provides an interface to explore, analyze, and visualize droplet digital PCR (ddPCR) data in R. It also includes an interactive web application with a visual user interface to facilitate analysis for anyone who is not comfortable with using R.  The app is [available online](http://daattali.com/shiny/ddpcr/) or it can be [run locally](#r-interactive).
 
-This document explains the purpose of this package and includes a tutorial on how to use it. It should take about 20 minutes to go through the entire document. 
+This document explains the purpose of this package and includes a tutorial on how to use it. It should take about 20 minutes to go through the entire document. A peer-reviewed publication describing this tool is available in [F1000Research](https://f1000research.com/articles/5-1411/).
 
 # Table of contents
 
@@ -87,7 +86,7 @@ Calculate the starting concentration of the target DNA molecule in the sample, d
 
 <h2 id="supported-types">Supported experiment types</h2>
 
-While this tool was originally developed to automatically gate data for a particular ddPCR assay ([*Quantitative Detection and Resolution of BRAF V600 Status in Colorectal Cancer Using Droplet Digital PCR and a Novel Wild-Type Negative Assay*](http://jmd.amjpathol.org/article/S1525-1578(15)00262-7/) by Roza Bidshahri, Dean Attali, et al.), any ddPCR experiment using an assay with similar characteristics can also use this tool to automatically gate the droplets. In order to benefit from the full automatic analysis, your ddPCR experiment needs to have these characteristics:  
+While this tool was originally developed to automatically gate data for a particular ddPCR assay ([*Quantitative Detection and Resolution of BRAF V600 Status in Colorectal Cancer Using Droplet Digital PCR and a Novel Wild-Type Negative Assay*](https://jmd.amjpathol.org/article/S1525-1578(15)00262-7/) by Roza Bidshahri, Dean Attali, et al.), any ddPCR experiment using an assay with similar characteristics can also use this tool to automatically gate the droplets. In order to benefit from the full automatic analysis, your ddPCR experiment needs to have these characteristics:  
 
 - The experiment uses a two-channel ddPCR assay with three expected droplet clusters: double-negative, double-positive, and single-positive.
 - The majority of droplets are empty (double-negative).
@@ -518,5 +517,7 @@ Each ddPCR plate has a plate type which determines what type of analysis to run 
 **For more details about how to create new plate types, see [the _Extending ddpcr by adding new plate types_ vignette](./extend.Rmd).**
 
 <h2 id="technical-details">Advanced topic 4: Implementation technical details</h2>
+
+The `ddpcr` package uses some advanced R programming techniques.
 
 **For details on the technical details regarding the code implementation, see [the _Technical details_ vignette](./technical_details.Rmd).**
