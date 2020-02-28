@@ -1,7 +1,7 @@
 Package: ddpcr
 Title: Analysis and Visualization of Droplet Digital PCR in R and on
         the Web
-Version: 1.12
+Version: 1.13
 Authors@R: c(
     person("Dean", "Attali", email = "daattali@gmail.com", role = c("aut", "cre"))
     )
@@ -24,8 +24,8 @@ LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2020-01-13 01:25:55 UTC; Oriane
+Packaged: 2020-02-28 05:49:02 UTC; Dean
 Author: Dean Attali [aut, cre]
 Maintainer: Dean Attali <daattali@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-01-13 06:00:03 UTC
+Date/Publication: 2020-02-28 07:20:18 UTC
