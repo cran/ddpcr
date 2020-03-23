@@ -1,9 +1,9 @@
-## ----defineparent--------------------------------------------------------
+## ----defineparent-------------------------------------------------------------
 parent_plate_type.fam_border <- function(plate) {
   "ddpcr_plate"
 }
 
-## ----defineparams--------------------------------------------------------
+## ----defineparams-------------------------------------------------------------
 define_params.fam_border <- function(plate) {
   params <- NextMethod("define_params")
   
@@ -20,7 +20,7 @@ define_params.fam_border <- function(plate) {
   params
 }
 
-## ----defineclusters------------------------------------------------------
+## ----defineclusters-----------------------------------------------------------
 define_clusters.fam_border <- function(plate) {
   clusters <- NextMethod("define_clusters")
   
@@ -30,7 +30,7 @@ define_clusters.fam_border <- function(plate) {
   )
 }
 
-## ----definesteps---------------------------------------------------------
+## ----definesteps--------------------------------------------------------------
 define_steps.fam_border <- function(plate) {
   steps <- NextMethod("define_steps")
   
@@ -40,7 +40,7 @@ define_steps.fam_border <- function(plate) {
     ))
 }
 
-## ----definegatestep------------------------------------------------------
+## ----definegatestep-----------------------------------------------------------
 gate_droplets <- function(plate) {
   # make sure this step was not called prematurely
   current_step <- step(plate, 'GATE')
@@ -92,7 +92,7 @@ gate_droplets <- function(plate) {
   plate
 }
 
-## ----defineplot----------------------------------------------------------
+## ----defineplot---------------------------------------------------------------
 plot.fam_border <- function(x, ..., show_border = FALSE) {
   # Plot a regular ddpcr plate
   p <- NextMethod("plot", x)
@@ -107,13 +107,13 @@ plot.fam_border <- function(x, ..., show_border = FALSE) {
   p
 }
 
-## ----defineborderparam---------------------------------------------------
+## ----defineborderparam--------------------------------------------------------
 `fam_border<-` <- function(plate, value) {
   params(plate, 'GATE', 'FAM_BORDER') <- value
   plate
 }
 
-## ----customanalysis, fig.show='hold', out.width='50%', fig.retina=FALSE----
+## ----customanalysis, fig.show='hold', out.width='50%', fig.retina=FALSE-------
 library(ddpcr)
 plate <- new_plate(dir = sample_data_dir(), type = "fam_border")
 fam_border(plate) <- 8000
