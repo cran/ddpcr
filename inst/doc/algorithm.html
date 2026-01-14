@@ -1,248 +1,581 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Algorithms used to analyze ddPCR droplets</title>
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Dean Attali" />
+
+<meta name="date" content="2026-01-14" />
+
+<title>Algorithms in ddpcr analysis</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
-};
+});
 </script>
 
-
-
-
-
 <style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
-}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
-}
 
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
-}
 
-h1 {
-   font-size:2.2em;
-}
 
-h2 {
-   font-size:1.8em;
-}
 
-h3 {
-   font-size:1.4em;
-}
 
-h4 {
-   font-size:1.0em;
-}
 
-h5 {
-   font-size:0.9em;
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
 }
-
-h6 {
-   font-size:0.8em;
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
 }
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
 }
-
-pre, img {
-  max-width: 100%;
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
 }
 pre {
-  overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
 }
-pre code {
-   display: block; padding: 0.5em;
+pre:not([class]) {
+background-color: #f7f7f7;
 }
-
 code {
-  font-size: 92%;
-  border: 1px solid #ccc;
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
 }
-
-code[class] {
-  background-color: #F8F8F8;
+p > code, li > code {
+padding: 2px 0px;
 }
-
-table, td, th {
-  border: none;
+div.figure {
+text-align: center;
 }
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
 }
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
 }
-
-@media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
 }
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
+
 
 
 
 </head>
 
 <body>
+
+
+
+
+<h1 class="title toc-ignore">Algorithms in ddpcr analysis</h1>
+<h4 class="author">Dean Attali</h4>
+<h4 class="date">2026-01-14</h4>
+
+
+
+<style type="text/css">
+img {
+max-width: 100%;
+height: auto;
+}
+</style>
+<div id="algorithms-used-to-analyze-ddpcr-droplets" class="section level1">
 <h1>Algorithms used to analyze ddPCR droplets</h1>
-
-<p>The algorithm described below consists of five main steps that are used to analyze a ddPCR assay with (FAM+)/(FAM+HEX+) clusters. Droplets in the (FAM+HEX+) cluster will be referred to as <em>wildtype</em>, and droplets in the (FAM+HEX-) cluster will be referred to as <em>mutant</em>. The final goal is to calculate the mutant frequency (<em>MF</em>) in each well by classifying all template-containing droplets as wildtype or mutant. A more detailed explanation of the algorithm is available in Chapter 2 of <a href="https://hdl.handle.net/2429/57928">my MSc thesis</a>. </p>
-
-<p>Assays with (HEX+)/(FAM+HEX+) clusters use a very similar algorithm but HEX and FAM are swapped in every step. Assays that are neither (FAM+)/(FAM+HEX+) nor (HEX+)/(FAM+HEX+) only benefit from the first three steps of the pipeline (droplet gating is not performed). </p>
-
-<p>The initial droplet data is a list of <em>n</em> matrices, where <em>n</em> is the number of wells. Each matrix contains has two columns and <em>m_i</em> rows, where <em>m_i</em> is the number of droplets in the <em>i</em>-th well. Each row represents a single droplet in a well and the two columns are the measured values of HEX and FAM fluorescent amplitude. </p>
-
+<p>The algorithm described below consists of five main steps that are
+used to analyze a ddPCR assay with (FAM+)/(FAM+HEX+) clusters. Droplets
+in the (FAM+HEX+) cluster will be referred to as <em>wildtype</em>, and
+droplets in the (FAM+HEX-) cluster will be referred to as
+<em>mutant</em>. The final goal is to calculate the mutant frequency
+(<em>MF</em>) in each well by classifying all template-containing
+droplets as wildtype or mutant. A more detailed explanation of the
+algorithm is available in Chapter 2 of <a href="https://hdl.handle.net/2429/57928">my MSc thesis</a>.</p>
+<p>Assays with (HEX+)/(FAM+HEX+) clusters use a very similar algorithm
+but HEX and FAM are swapped in every step. Assays that are neither
+(FAM+)/(FAM+HEX+) nor (HEX+)/(FAM+HEX+) only benefit from the first
+three steps of the pipeline (droplet gating is not performed).</p>
+<p>The initial droplet data is a list of <em>n</em> matrices, where
+<em>n</em> is the number of wells. Each matrix contains has two columns
+and <em>m_i</em> rows, where <em>m_i</em> is the number of droplets in
+the <em>i</em>-th well. Each row represents a single droplet in a well
+and the two columns are the measured values of HEX and FAM fluorescent
+amplitude.</p>
+<div id="step-1-identify-failed-wells" class="section level2">
 <h2>Step 1: Identify failed wells</h2>
-
-<p>The first step is to identify any wells that clearly failed the ddPCR run by checking four quality control metrics.</p>
-
-<p>The first check is to ensure the total number of droplets in a well must exceed a specific threshold value (<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;TOTAL_DROPS_T&#39;)</code>, default is 5,000). BioRad claims that wells should have 20,000 droplets, but in practice we usually see between 12,000-17,000 droplets per well, and any well with too few droplets is considered a failure.</p>
-
-<p>The other three metrics evaluate the expected droplet clusters (empty, mutant, wildtype) and their quality by fitting a two-component Gaussian mixture model to the FAM signals of all droplets. Each of the two components is defined with a mean (<em>center</em>) and a standard deviation (<em>sd</em>). In a typical well, the distribution with the lower center will capture the empty droplets, while the higher distribution models the FAM+ (or template-containing) droplets. Every well is expected to have mostly empty droplets, so the second metric involves looking for acceptable segregation of empty droplets from the FAM+ cluster by measuring the difference between the centers of the two distributions. The third metric evaluates the relative droplet frequency within the lower (empty) population to ensure the fraction of empty droplets is above a certain threshold (<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;EMPTY_LAMBDA_LOW_T&#39;)</code>, default is 0.3). Failure to meet this criterion indicates a lack of a defined empty cluster. Similarly, the fourth quality control check ensures the empty droplet frequency must also be below a certain fraction (<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;EMPTY_LAMBDA_HIGH_T&#39;)</code>, default is 0.99), as having too many empty droplets is a sign that there is not enough amplifiable template in the well.</p>
-
-<p>Any well that does not meet all four criteria is deemed a failed run, and such wells are removed from further analysis.</p>
-
+<p>The first step is to identify any wells that clearly failed the ddPCR
+run by checking four quality control metrics.</p>
+<p>The first check is to ensure the total number of droplets in a well
+must exceed a specific threshold value
+(<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;TOTAL_DROPS_T&#39;)</code>, default
+is 5,000). BioRad claims that wells should have 20,000 droplets, but in
+practice we usually see between 12,000-17,000 droplets per well, and any
+well with too few droplets is considered a failure.</p>
+<p>The other three metrics evaluate the expected droplet clusters
+(empty, mutant, wildtype) and their quality by fitting a two-component
+Gaussian mixture model to the FAM signals of all droplets. Each of the
+two components is defined with a mean (<em>center</em>) and a standard
+deviation (<em>sd</em>). In a typical well, the distribution with the
+lower center will capture the empty droplets, while the higher
+distribution models the FAM+ (or template-containing) droplets. Every
+well is expected to have mostly empty droplets, so the second metric
+involves looking for acceptable segregation of empty droplets from the
+FAM+ cluster by measuring the difference between the centers of the two
+distributions. The third metric evaluates the relative droplet frequency
+within the lower (empty) population to ensure the fraction of empty
+droplets is above a certain threshold
+(<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;EMPTY_LAMBDA_LOW_T&#39;)</code>,
+default is 0.3). Failure to meet this criterion indicates a lack of a
+defined empty cluster. Similarly, the fourth quality control check
+ensures the empty droplet frequency must also be below a certain
+fraction
+(<code>params(plate, &#39;REMOVE_FAILURES&#39;, &#39;EMPTY_LAMBDA_HIGH_T&#39;)</code>,
+default is 0.99), as having too many empty droplets is a sign that there
+is not enough amplifiable template in the well.</p>
+<p>Any well that does not meet all four criteria is deemed a failed run,
+and such wells are removed from further analysis.</p>
+</div>
+<div id="step-2-identify-outlier-droplets" class="section level2">
 <h2>Step 2: Identify outlier droplets</h2>
-
-<p>While the FAM and HEX signal intensities have a lower bound of 0, there is no upper bound on the value the ddPCR reader may read. As a result, it is possible to observe a small number of droplets with abnormally large HEX or FAM values, which can be considered outlier droplets.  A common method for detecting outliers in normal distributions is to calculate the first quartile (<em>Q1</em>), third quartile (<em>Q3</em>), and interquartile range (<em>IQR</em>, defined as <em>Q3 - Q1</em>), and define any observations that fall outside the range of [<em>Q1 - 1.5*IQR</em>, <em>Q3 + 1.5*IQR</em>] as outliers.</p>
-
-<p>If ddPCR data was normally distributed and this method could be used, only the upper bound of <em>Q3 + 1.5*IQR</em> would be used to define outliers, as there are no outliers on the lower end of the distribution because most values are close to the minimum value of 0.  However, ddPCR data is extremely skewed and non-normal, so the common outlier detection approach will not work. Instead, a small tweak can be made to make it applicable to ddPCR data. For each signal dimension (FAM and HEX) we identify the top <em>p</em> percent (<em>p</em> = <code>params(plate, &#39;REMOVE_OUTLIERS&#39;, &#39;TOP_PERCENT&#39;)</code>, default is 1%) of droplets having the highest signal value in that dimension out of droplets in the entire plate. An outlier threshold is then defined as <em>Q3 + k*IQR</em> (<em>k</em> = <code>params(plate, &#39;REMOVE_OUTLIERS&#39;, &#39;CUTOFF_IQR&#39;)</code>, default is 5) of this subset of droplets, and any droplets that have a signal value larger than this threshold are considered outliers. This is essentially a variation of the common outlier detection method but the outlier threshold is calculated using only a fraction of the droplets.</p>
-
-<p>Any droplet in any well that has a FAM value exceeding the FAM outlier threshold or a HEX value exceeding the HEX outlier threshold is considered an outlier droplet, and removed from further analysis. The figure below shows a summary of this method.</p>
-
-<p><a href="../inst/vignettes-supp/outliers.png"><img src="data:image/png;base64,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" alt="Remove outliers"/></a></p>
-
-<p>Plot A shows a well with a clear outlier on the far right. The dotted line shows the HEX value that corresponds to <em>Q3 + 5*IQR</em> of all HEX values, which is clearly a poor threshold for determining outliers. Plot B shows only the 1% of droplets with the highest HEX value, while the dotted line shows the value of <em>Q3 + 5*IQR</em> of the HEX values of only those droplets. Plot C shows the full well data and the outlier threshold calculated using the top 1% of the droplets. Using this threshold, the lone outlier point at the extreme HEX value (marked in red) is identified as an outlier.</p>
-
+<p>While the FAM and HEX signal intensities have a lower bound of 0,
+there is no upper bound on the value the ddPCR reader may read. As a
+result, it is possible to observe a small number of droplets with
+abnormally large HEX or FAM values, which can be considered outlier
+droplets. A common method for detecting outliers in normal distributions
+is to calculate the first quartile (<em>Q1</em>), third quartile
+(<em>Q3</em>), and interquartile range (<em>IQR</em>, defined as <em>Q3
+- Q1</em>), and define any observations that fall outside the range of
+[<em>Q1 - 1.5*IQR</em>, <em>Q3 + 1.5*IQR</em>] as outliers.</p>
+<p>If ddPCR data was normally distributed and this method could be used,
+only the upper bound of <em>Q3 + 1.5*IQR</em> would be used to define
+outliers, as there are no outliers on the lower end of the distribution
+because most values are close to the minimum value of 0. However, ddPCR
+data is extremely skewed and non-normal, so the common outlier detection
+approach will not work. Instead, a small tweak can be made to make it
+applicable to ddPCR data. For each signal dimension (FAM and HEX) we
+identify the top <em>p</em> percent (<em>p</em> =
+<code>params(plate, &#39;REMOVE_OUTLIERS&#39;, &#39;TOP_PERCENT&#39;)</code>, default is
+1%) of droplets having the highest signal value in that dimension out of
+droplets in the entire plate. An outlier threshold is then defined as
+<em>Q3 + k*IQR</em> (<em>k</em> =
+<code>params(plate, &#39;REMOVE_OUTLIERS&#39;, &#39;CUTOFF_IQR&#39;)</code>, default is
+5) of this subset of droplets, and any droplets that have a signal value
+larger than this threshold are considered outliers. This is essentially
+a variation of the common outlier detection method but the outlier
+threshold is calculated using only a fraction of the droplets.</p>
+<p>Any droplet in any well that has a FAM value exceeding the FAM
+outlier threshold or a HEX value exceeding the HEX outlier threshold is
+considered an outlier droplet, and removed from further analysis. The
+figure below shows a summary of this method.</p>
+<div class="float">
+<img role="img" aria-label="Remove outliers" src="data:image/png;base64,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" alt="Remove outliers" />
+<div class="figcaption">Remove outliers</div>
+</div>
+<p>Plot A shows a well with a clear outlier on the far right. The dotted
+line shows the HEX value that corresponds to <em>Q3 + 5*IQR</em> of all
+HEX values, which is clearly a poor threshold for determining outliers.
+Plot B shows only the 1% of droplets with the highest HEX value, while
+the dotted line shows the value of <em>Q3 + 5*IQR</em> of the HEX values
+of only those droplets. Plot C shows the full well data and the outlier
+threshold calculated using the top 1% of the droplets. Using this
+threshold, the lone outlier point at the extreme HEX value (marked in
+red) is identified as an outlier.</p>
+</div>
+<div id="step-3-identify-empty-droplets" class="section level2">
 <h2>Step 3: Identify empty droplets</h2>
-
-<p>Droplets with very low fluorescent signal in both channels are considered empty and are removed from any downstream analysis. These droplets do not contain any amplifiable template and make up the majority of droplets in a typical well. The removal of empty droplets is beneficial for two reasons. First, it greatly reduces the dimension of the data, which consequently allows for faster computations on the remaining droplets. Secondly, removing the major cluster of empty droplets also serves to eliminate any bias in a statistic model that would be otherwise dominated by the large number of empty droplets. While a large portion of the droplets is discarded, no useful information is lost as all the template-containing droplets are retained.</p>
-
-<p>Empty droplets are identified in each well separately. First, a two-component Gaussian mixture model is fitted to the FAM signals of all droplets in a well. Only the FAM signal is used because all empty droplets emit no FAM signal while all template-containing droplets will surely emit FAM signal. Note that the same argument cannot be applied to the HEX signal because both empty droplets and mutant droplets are HEX-, so FAM can be used as a discriminant for empty droplets while HEX cannot. The Gaussian distribution with the lower mean is assumed to be modelling the empty droplets, and it will likely have a fairly small standard deviation (<em>sd</em>) as the empty droplets are densely clustered. A FAM threshold for empty droplets is then calculated under the assumption that the FAM value of empty droplets can be roughly modeled by a normal distribution. Specifically, a threshold is defined as <em>mean + k*sd</em> (<em>k</em> = <code>params(plate, &#39;REMOVE_EMPTY&#39;, &#39;CUTOFF_SD&#39;)</code>, default is 7) of the lower (empty) distribution.</p>
-
-<p>Any droplets in the well with a FAM value lower than the threshold are deemed empty and not considered in further analysis. The figure below shows a summary of this step.</p>
-
-<p><a href="../inst/vignettes-supp/empty.png"><img src="data:image/png;base64,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" alt="Remove empty"/></a></p>
-
-<p>Plot A shows a well and a marginal density plot of the FAM values of its droplets. The solid lines are the means of the two Gaussian distributions fitted to the FAM values, while the dotted line is the <em>mean + 7*sd</em> of the lower one. Plot B shows that using the <em>mean + 7*sd</em> value is a fairly accurate threshold for the empty droplets (marked in red).</p>
-
+<p>Droplets with very low fluorescent signal in both channels are
+considered empty and are removed from any downstream analysis. These
+droplets do not contain any amplifiable template and make up the
+majority of droplets in a typical well. The removal of empty droplets is
+beneficial for two reasons. First, it greatly reduces the dimension of
+the data, which consequently allows for faster computations on the
+remaining droplets. Secondly, removing the major cluster of empty
+droplets also serves to eliminate any bias in a statistic model that
+would be otherwise dominated by the large number of empty droplets.
+While a large portion of the droplets is discarded, no useful
+information is lost as all the template-containing droplets are
+retained.</p>
+<p>Empty droplets are identified in each well separately. First, a
+two-component Gaussian mixture model is fitted to the FAM signals of all
+droplets in a well. Only the FAM signal is used because all empty
+droplets emit no FAM signal while all template-containing droplets will
+surely emit FAM signal. Note that the same argument cannot be applied to
+the HEX signal because both empty droplets and mutant droplets are HEX-,
+so FAM can be used as a discriminant for empty droplets while HEX
+cannot. The Gaussian distribution with the lower mean is assumed to be
+modelling the empty droplets, and it will likely have a fairly small
+standard deviation (<em>sd</em>) as the empty droplets are densely
+clustered. A FAM threshold for empty droplets is then calculated under
+the assumption that the FAM value of empty droplets can be roughly
+modeled by a normal distribution. Specifically, a threshold is defined
+as <em>mean + k*sd</em> (<em>k</em> =
+<code>params(plate, &#39;REMOVE_EMPTY&#39;, &#39;CUTOFF_SD&#39;)</code>, default is 7)
+of the lower (empty) distribution.</p>
+<p>Any droplets in the well with a FAM value lower than the threshold
+are deemed empty and not considered in further analysis. The figure
+below shows a summary of this step.</p>
+<div class="float">
+<img role="img" aria-label="Remove empty" src="data:image/png;base64,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" alt="Remove empty" />
+<div class="figcaption">Remove empty</div>
+</div>
+<p>Plot A shows a well and a marginal density plot of the FAM values of
+its droplets. The solid lines are the means of the two Gaussian
+distributions fitted to the FAM values, while the dotted line is the
+<em>mean + 7*sd</em> of the lower one. Plot B shows that using the
+<em>mean + 7*sd</em> value is a fairly accurate threshold for the empty
+droplets (marked in red).</p>
+</div>
+<div id="step-4-gate-droplets" class="section level2">
 <h2>Step 4: Gate droplets</h2>
-
-<p>The main step of the pipeline is to gate the remaining droplets automatically and classify each droplet as either <em>mutant</em>, <em>wildtype</em>, or <em>rain</em>. Rain droplets are droplets that are not empty, yet the ddPCR reader did not detect enough fluorescence emitted from them. The exact cause of rain droplets is not yet clear, but they are normally omitted from analysis due to their ambiguity. Droplets that do have contain high quality amplifiable template are defined as <em>filled</em> droplets; every filled droplet contains either a mutant or wildtype template and can therefore be classified as either mutant or wildtype.</p>
-
-<p>The gating step is best explained by being broken down into sub-steps.</p>
-
+<p>The main step of the pipeline is to gate the remaining droplets
+automatically and classify each droplet as either <em>mutant</em>,
+<em>wildtype</em>, or <em>rain</em>. Rain droplets are droplets that are
+not empty, yet the ddPCR reader did not detect enough fluorescence
+emitted from them. The exact cause of rain droplets is not yet clear,
+but they are normally omitted from analysis due to their ambiguity.
+Droplets that do have contain high quality amplifiable template are
+defined as <em>filled</em> droplets; every filled droplet contains
+either a mutant or wildtype template and can therefore be classified as
+either mutant or wildtype.</p>
+<p>The gating step is best explained by being broken down into
+sub-steps.</p>
+<div id="step-4.1-identify-rain-droplets" class="section level3">
 <h3>Step 4.1: Identify rain droplets</h3>
-
-<p>Similarly to the way empty droplets are identified in each well by calculating a FAM threshold, rain droplets are also identified using a unique FAM threshold in each well. A two-component Gaussian mixture model is fitted to the FAM signals of all droplets in each well individually. The filled droplets (mutant and wildtype) all have similar FAM values, while the rain droplets have a wider range of FAM values and have, by definition, lower FAM values. Therefore, the Gaussian distribution with the higher mean is assumed to capture the filled droplets. A FAM threshold is calculated as <em>mean - k*sd</em> (<em>k</em> = <code>params(plate, &#39;CLASSIFY&#39;, &#39;CLUSTERS_BORDERS_NUM_SD&#39;)</code>, default is 3) of the higher (filled) distribution. Any droplets in the well below this value are considered rain, and all droplets above the threshold are considered the filled droplets and are used in the next step.</p>
-
+<p>Similarly to the way empty droplets are identified in each well by
+calculating a FAM threshold, rain droplets are also identified using a
+unique FAM threshold in each well. A two-component Gaussian mixture
+model is fitted to the FAM signals of all droplets in each well
+individually. The filled droplets (mutant and wildtype) all have similar
+FAM values, while the rain droplets have a wider range of FAM values and
+have, by definition, lower FAM values. Therefore, the Gaussian
+distribution with the higher mean is assumed to capture the filled
+droplets. A FAM threshold is calculated as <em>mean - k*sd</em>
+(<em>k</em> =
+<code>params(plate, &#39;CLASSIFY&#39;, &#39;CLUSTERS_BORDERS_NUM_SD&#39;)</code>,
+default is 3) of the higher (filled) distribution. Any droplets in the
+well below this value are considered rain, and all droplets above the
+threshold are considered the filled droplets and are used in the next
+step.</p>
+</div>
+<div id="step-4.2-identify-mutant-versus-wildtype-droplets" class="section level3">
 <h3>Step 4.2: Identify mutant versus wildtype droplets</h3>
-
-<p>All remaining droplets at this stage contain either mutant or wildtype templates. These droplets all have similar FAM values, while their HEX values are the best predictor to discriminate between mutant and wildtype droplets. While employing simple clustering methods such as k-means to cluster the two groups of droplets may seem like a feasible solution, it does not yield good results on many datasets. Instead, the two clusters are defined by computing the density estimate of the distribution of HEX values, finding the local minimum of the density estimate, and defining this minimum as the gate between mutant and wildtype droplets. When computing the kernel density estimate, the degree of smoothing is an important variable that strongly affects the resulting clusters, so the algorithm attempts to find the optimal smoothing bandwidth by iteratively increasing the smoothing parameter and using heuristics to assess the quality of the density estimation.</p>
-
-<p>With an ideal smoothing bandwidth, the density estimator of the HEX values will have two local maxima and one local minimum between them. The two local maxima capture the centers of the mutant and wildtype clusters, while the local minimum defines the border that separates wildtype from mutant droplets. If the smoothing bandwidth is too high, the mutant cluster will not be identified, while too low of a bandwidth will falsely identify most droplets as mutant.  The optimal bandwidth for correct gating varies between wells within the same dataset, so an iterative process of finding the optimal smoothing parameter is performed in every well by multiplying the default bandwidth by an increasingly larger parameter <em>k</em>.</p>
-
-<p>Initially, <em>k</em> is set to a specific value <em>k_min</em> (<em>k_min</em> = <code>params(plate, &#39;CLASSIFY&#39;, &#39;ADJUST_BW_MIN&#39;)</code>, default is 4) and the kernel density is estimated by adjusting the default smoothing bandwidth by <em>k</em>. If there is only one local maximum in the density curve, then all the droplets are assumed to be wildtype. If there are two local maxima, then a gate is drawn at the local minimum between the two maxima, with the droplets on the lower end assigned to the mutant cluster and the droplets on the higher end assigned as wildtype. If there are more than two local maxima, <em>k</em> is increased in small increments until a final value of <em>k_max</em> (<em>k_max</em> = <code>params(plate, &#39;CLASSIFY&#39;, &#39;ADJUST_BW_MAX&#39;)</code>, default is 20). At each iteration, the number of local maxima is inspected until there are only two, at which point the gate is defined as mentioned previously. If no values of <em>k</em> produce acceptable results, the gate is still defined using the two left-most local minimum, but the well is also flagged as inaccurate in order for the user to review it.</p>
-
-<p>A couple heuristics are also implemented to ensure the most accurate gating. First, when counting the number of local maxima, the right-most peak is assessed to ensure that it corresponds to the large cluster of wildtype droplets and is not simply a result of a few outlier droplets. Second, after calculating a gating threshold, the threshold can be slightly adjusted.</p>
-
-<p>The figure below shows a simple visualization of how rain droplets are identified and the filled droplets are classified as mutant vs wildtype.</p>
-
-<p><a href="../inst/vignettes-supp/gating.png"><img src="data:image/png;base64,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" alt="Classify droplets"/></a></p>
-
-<p>Plot A shows the same well after removing empty droplets and a marginal density plot of the FAM values of its droplets. The solid line is the mean of the larger of the two Gaussian distributions fitted to the FAM values, while the dotted line is the <em>mean - 3*sd</em> of the distribution. This dotted line acts as the threshold under which all droplets are considered rain.  Plot B shows the filled droplets only, along with a marginal density plot of their HEX values. The solid lines represent the two local maxima in the density kernel, while the dotted lines is the value of the local minimum between the two maxima. The dotted line is used as a threshold to distinguish between mutant droplets to its left and wildtype droplets to its right.  Plot C shows the full well and the classification of each droplet, along with the thresholds used to determine these assignments. The outlier droplet is excluded from the visualization.  The black droplets are classified as empty, blue droplets are rain, green droplets contain wildtype template, and purple droplets contain mutant DNA.</p>
-
+<p>All remaining droplets at this stage contain either mutant or
+wildtype templates. These droplets all have similar FAM values, while
+their HEX values are the best predictor to discriminate between mutant
+and wildtype droplets. While employing simple clustering methods such as
+k-means to cluster the two groups of droplets may seem like a feasible
+solution, it does not yield good results on many datasets. Instead, the
+two clusters are defined by computing the density estimate of the
+distribution of HEX values, finding the local minimum of the density
+estimate, and defining this minimum as the gate between mutant and
+wildtype droplets. When computing the kernel density estimate, the
+degree of smoothing is an important variable that strongly affects the
+resulting clusters, so the algorithm attempts to find the optimal
+smoothing bandwidth by iteratively increasing the smoothing parameter
+and using heuristics to assess the quality of the density
+estimation.</p>
+<p>With an ideal smoothing bandwidth, the density estimator of the HEX
+values will have two local maxima and one local minimum between them.
+The two local maxima capture the centers of the mutant and wildtype
+clusters, while the local minimum defines the border that separates
+wildtype from mutant droplets. If the smoothing bandwidth is too high,
+the mutant cluster will not be identified, while too low of a bandwidth
+will falsely identify most droplets as mutant. The optimal bandwidth for
+correct gating varies between wells within the same dataset, so an
+iterative process of finding the optimal smoothing parameter is
+performed in every well by multiplying the default bandwidth by an
+increasingly larger parameter <em>k</em>.</p>
+<p>Initially, <em>k</em> is set to a specific value <em>k_min</em>
+(<em>k_min</em> =
+<code>params(plate, &#39;CLASSIFY&#39;, &#39;ADJUST_BW_MIN&#39;)</code>, default is 4)
+and the kernel density is estimated by adjusting the default smoothing
+bandwidth by <em>k</em>. If there is only one local maximum in the
+density curve, then all the droplets are assumed to be wildtype. If
+there are two local maxima, then a gate is drawn at the local minimum
+between the two maxima, with the droplets on the lower end assigned to
+the mutant cluster and the droplets on the higher end assigned as
+wildtype. If there are more than two local maxima, <em>k</em> is
+increased in small increments until a final value of <em>k_max</em>
+(<em>k_max</em> =
+<code>params(plate, &#39;CLASSIFY&#39;, &#39;ADJUST_BW_MAX&#39;)</code>, default is 20).
+At each iteration, the number of local maxima is inspected until there
+are only two, at which point the gate is defined as mentioned
+previously. If no values of <em>k</em> produce acceptable results, the
+gate is still defined using the two left-most local minimum, but the
+well is also flagged as inaccurate in order for the user to review
+it.</p>
+<p>A couple heuristics are also implemented to ensure the most accurate
+gating. First, when counting the number of local maxima, the right-most
+peak is assessed to ensure that it corresponds to the large cluster of
+wildtype droplets and is not simply a result of a few outlier droplets.
+Second, after calculating a gating threshold, the threshold can be
+slightly adjusted.</p>
+<p>The figure below shows a simple visualization of how rain droplets
+are identified and the filled droplets are classified as mutant vs
+wildtype.</p>
+<div class="float">
+<img role="img" aria-label="Classify droplets" src="data:image/png;base64,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" alt="Classify droplets" />
+<div class="figcaption">Classify droplets</div>
+</div>
+<p>Plot A shows the same well after removing empty droplets and a
+marginal density plot of the FAM values of its droplets. The solid line
+is the mean of the larger of the two Gaussian distributions fitted to
+the FAM values, while the dotted line is the <em>mean - 3*sd</em> of the
+distribution. This dotted line acts as the threshold under which all
+droplets are considered rain. Plot B shows the filled droplets only,
+along with a marginal density plot of their HEX values. The solid lines
+represent the two local maxima in the density kernel, while the dotted
+lines is the value of the local minimum between the two maxima. The
+dotted line is used as a threshold to distinguish between mutant
+droplets to its left and wildtype droplets to its right. Plot C shows
+the full well and the classification of each droplet, along with the
+thresholds used to determine these assignments. The outlier droplet is
+excluded from the visualization. The black droplets are classified as
+empty, blue droplets are rain, green droplets contain wildtype template,
+and purple droplets contain mutant DNA.</p>
+</div>
+<div id="step-4.3-classify-wells-as-mutant-versus-wildtype" class="section level3">
 <h3>Step 4.3: Classify wells as mutant versus wildtype</h3>
-
-<p>After determining which droplets are mutant and wildtype, the <em>mutant frequency</em> of each well is calculated as <em>mutant frequency = number of mutant droplets / number of filled droplets * 100%</em>. Using the mutant frequency of each well, it is possible to classify each well as a wildtype well (containing mostly wildtype droplets) or a mutant well (containing a statistically significant number of mutant droplets). In this algorithm, a mutant well is defined as having a mutant frequency that is statistically significantly higher than <em>p</em>% (<em>p</em> = <code>params(plate, &#39;CLASSIFY&#39;, &#39;SIGNIFICANT_NEGATIVE_FREQ&#39;)</code>, default is 1%) at a significance level of <em>s</em> (<em>s</em> = <code>params(plate, &#39;CLASSIFY&#39;, &#39;SIGNIFICANT_P_VALUE&#39;)</code>, default is 0.01). The binomial test is carried out for this task, with the null hypothesis being that the real mutant frequency is at most <em>p</em>%.</p>
-
-<p>As an example, a well with 500 filled droplets that includes 7 mutant droplets is classified as a wildtype well as the p-value is higher than 0.01 (<em>P(X &gt;= 7) = 1 - P(X &lt; 7) = 1 - [P(X = 0) + P(X = 1) + &hellip; + P(X = 6)] = 1 - [b(0; 500, 0.01) + b(1; 500, 0.01) + &hellip; + b(6; 500, 0.01)] = 0.237 &gt; 0.01</em>) despite a mutant frequency of 1.4% (<em>7 / 500 * 100</em>), while a well with 5000 filled droplets that includes 70 mutant droplets has an identical mutant frequency but is deemed as mutant because of a significant p-values (<em>P(X &gt;= 70) = 1 - P(X &lt; 70) = 1 - [P(X = 0) + P(X = 1) + &hellip; + P(X = 69)] = 1 - [b(0; 5000, 0.01) + b(1; 5000, 0.01) + &hellip; + b(69; 5000, 0.01)] = 0.004 &lt; 0.01</em>).</p>
-
+<p>After determining which droplets are mutant and wildtype, the
+<em>mutant frequency</em> of each well is calculated as <em>mutant
+frequency = number of mutant droplets / number of filled droplets *
+100%</em>. Using the mutant frequency of each well, it is possible to
+classify each well as a wildtype well (containing mostly wildtype
+droplets) or a mutant well (containing a statistically significant
+number of mutant droplets). In this algorithm, a mutant well is defined
+as having a mutant frequency that is statistically significantly higher
+than <em>p</em>% (<em>p</em> =
+<code>params(plate, &#39;CLASSIFY&#39;, &#39;SIGNIFICANT_NEGATIVE_FREQ&#39;)</code>,
+default is 1%) at a significance level of <em>s</em> (<em>s</em> =
+<code>params(plate, &#39;CLASSIFY&#39;, &#39;SIGNIFICANT_P_VALUE&#39;)</code>, default
+is 0.01). The binomial test is carried out for this task, with the null
+hypothesis being that the real mutant frequency is at most
+<em>p</em>%.</p>
+<p>As an example, a well with 500 filled droplets that includes 7 mutant
+droplets is classified as a wildtype well as the p-value is higher than
+0.01 (<em>P(X &gt;= 7) = 1 - P(X &lt; 7) = 1 - [P(X = 0) + P(X = 1) + …
++ P(X = 6)] = 1 - [b(0; 500, 0.01) + b(1; 500, 0.01) + … + b(6; 500,
+0.01)] = 0.237 &gt; 0.01</em>) despite a mutant frequency of 1.4% (<em>7
+/ 500 * 100</em>), while a well with 5000 filled droplets that includes
+70 mutant droplets has an identical mutant frequency but is deemed as
+mutant because of a significant p-values (<em>P(X &gt;= 70) = 1 - P(X
+&lt; 70) = 1 - [P(X = 0) + P(X = 1) + … + P(X = 69)] = 1 - [b(0; 5000,
+0.01) + b(1; 5000, 0.01) + … + b(69; 5000, 0.01)] = 0.004 &lt;
+0.01</em>).</p>
+</div>
+</div>
+<div id="step-5-revisit-gating-of-wildtype-wells" class="section level2">
 <h2>Step 5: Revisit gating of wildtype wells</h2>
+<p>Mutant wells have clearly defined clusters of mutant and wildtype
+droplets, making it easy to determine where to gate them. On the other
+hand, wildtype wells have very few (if any) mutant droplets, making it
+difficult to accurately identify them. It is possible to leverage the
+data in mutant wells to get a more accurately find mutant droplets in
+wildtype wells. This is only possible if there are enough wells to draw
+data from, so this step only runs if there are at least <em>n</em>
+mutant wells in the plate (<em>n</em> =
+<code>(plate, &#39;RECLASSIFY&#39;, &#39;MIN_WELLS_NEGATIVE_CLUSTER&#39;)</code>,
+default is 4).</p>
+<p>The idea is to see where the mutant cluster is located relative to
+the wildtype cluster in most wells, and assume that wildtype wells are
+distributed similarly. To measure this feature, a special
+<em>mutant-to-wildtype ratio</em> is calculated for every mutant well by
+comparing the HEX value of the right-most mutant droplet to the median
+HEX value of the wildtype droplets (<em>mutant-to-wildtype ratio =
+max(mutant) / median(wildtype)</em>). After calculating this ratio for
+all mutant wells and obtaining a list of such ratios, a single value is
+used as the “consensus” ratio by choosing a certain percentile from the
+list
+(<code>params(plate, &#39;RECLASSIFY&#39;, &#39;BORDER_RATIO_QUANTILE&#39;))</code>,
+default is 75). The median HEX value of filled droplets in each wildtype
+well is multiplied by the consensus mutant-to-wildtype ratio, and the
+resulting value is used as the new border between mutant and wildtype
+droplets.</p>
+</div>
+</div>
 
-<p>Mutant wells have clearly defined clusters of mutant and wildtype droplets, making it easy to determine where to gate them. On the other hand, wildtype wells have very few (if any) mutant droplets, making it difficult to accurately identify them. It is possible to leverage the data in mutant wells to get a more accurately find mutant droplets in wildtype wells. This is only possible if there are enough wells to draw data from, so this step only runs if there are at least <em>n</em> mutant wells in the plate (<em>n</em> = <code>(plate, &#39;RECLASSIFY&#39;, &#39;MIN_WELLS_NEGATIVE_CLUSTER&#39;)</code>, default is 4).</p>
 
-<p>The idea is to see where the mutant cluster is located relative to the wildtype cluster in most wells, and assume that wildtype wells are distributed similarly. To measure this feature, a special <em>mutant-to-wildtype ratio</em> is calculated for every mutant well by comparing the HEX value of the right-most mutant droplet to the median HEX value of the wildtype droplets (<em>mutant-to-wildtype ratio = max(mutant) / median(wildtype)</em>). After calculating this ratio for all mutant wells and obtaining a list of such ratios, a single value is used as the &ldquo;consensus&rdquo; ratio by choosing a certain percentile from the list (<code>params(plate, &#39;RECLASSIFY&#39;, &#39;BORDER_RATIO_QUANTILE&#39;))</code>, default is 75).  The median HEX value of filled droplets in each wildtype well is multiplied by the consensus mutant-to-wildtype ratio, and the resulting value is used as the new border between mutant and wildtype droplets.</p>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
-
 </html>

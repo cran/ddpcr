@@ -3,7 +3,7 @@ knitr::opts_chunk$set(tidy = FALSE, comment = "#>")
 options(ddpcr.verbose = TRUE)
 
 ## ----installpkg, eval = FALSE-------------------------------------------------
-#  install.packages("ddpcr")
+# install.packages("ddpcr")
 
 ## ----quickstart, message = FALSE, fig.show='hold', out.width='50%', fig.retina=FALSE----
 library(ddpcr)

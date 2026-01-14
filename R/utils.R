@@ -24,20 +24,20 @@ get_single_well <- function(plate, well_id,
 
   result <-
     plate_data(plate) %>%
-    dplyr::filter_(~ well == well_id) %>%
-    dplyr::select_(quote(-well))
+    dplyr::filter(.data[["well"]] == well_id) %>%
+    dplyr::select(-dplyr::all_of("well"))
 
   if (!empty) {
     result %<>%
-      dplyr::filter_(~ cluster != plate %>% cluster('EMPTY'))
+      dplyr::filter(.data[["cluster"]] != cluster(plate, 'EMPTY'))
   }
   if (!outliers) {
     result %<>%
-      dplyr::filter_(~ cluster != plate %>% cluster('OUTLIER'))
+      dplyr::filter(.data[["cluster"]] != cluster(plate, 'OUTLIER'))
   }
   if (!clusters) {
     result %<>%
-      dplyr::select_(~ -cluster)
+      dplyr::select(-dplyr::all_of("cluster"))
   }
 
   result
@@ -223,8 +223,8 @@ merge_dfs_overwrite_col <- function(olddf, newdf, cols, bycol = "well") {
                                     result[[colname_x]],
                                     result[[colname_y]])
       result %<>%
-        dplyr::rename_(.dots = stats::setNames(colname_x, colname)) %>%
-        dplyr::select_(lazyeval::interp(~ -colname, colname = as.name(colname_y)))
+        dplyr::rename("{colname}" := dplyr::all_of(colname_x)) %>%
+        dplyr::select(-dplyr::all_of(colname_y))
     }
   }
 
@@ -381,14 +381,14 @@ bind_df_ends <- function(df, cols, dir = 1) {
   if (dir == 1) {
     df <-
       cbind(
-        df %>% dplyr::select_(~(dplyr::one_of(cols))),
-        df %>% dplyr::select_(~(-dplyr::one_of(cols)))
+        df %>% dplyr::select(dplyr::one_of(cols)),
+        df %>% dplyr::select(-dplyr::one_of(cols))
       )
   } else if (dir == -1) {
     df <-
       cbind(
-        df %>% dplyr::select_(~(-dplyr::one_of(cols))),
-        df %>% dplyr::select_(~(dplyr::one_of(cols)))
+        df %>% dplyr::select(-dplyr::one_of(cols)),
+        df %>% dplyr::select(dplyr::one_of(cols))
       )
   } else {
     stop("bind_df_ends: dir can only be -1 or 1", call. = FALSE)
@@ -411,10 +411,36 @@ capitalize <- function(x) {
         sep = "", collapse = " ")
 }
 
-# At some point around 2019, read_csv introduced new attributes that broke tests
+# The first argument should be the path to the file to be read
 readr_read_csv <- function(...) {
-  data <- readr::read_csv(...)
+  # detect any non-delimited rows at the top of the file
+  skips <- detect_skip(..1)
+  # silence readr repairing names
+  data <- readr::read_csv(..., skip = skips, name_repair = "unique_quiet", show_col_types = FALSE)
+  # drop empty columns
+  data <- data[, vapply(data, function(x) !all(is.na(x)), TRUE)]
   class(data) <- setdiff(class(data), "spec_tbl_df")
   attr(data, "spec") <- NULL
   data
+}
+
+# Newer versions of exports contain header rows with e.g.
+# Target Value of 0 = negative
+# Target Value of 1 = positive
+# Target Value of u = unclassified (Advanced Classification Mode)
+#  -- this detects and returns the number of lines that should be skipped
+detect_skip <- function(file) {
+  found_data <- FALSE
+  lines <- readLines(file, warn = FALSE)
+  for (line_num in seq_along(lines)) {
+    line <- lines[line_num]
+    if (line != "" && !grepl("^Target", line)) {
+      found_data <- TRUE
+      break
+    }
+  }
+  if (!found_data) {
+    stop("Reached end of file without detecting any data")
+  }
+  line_num - 1
 }
